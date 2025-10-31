@@ -17,5 +17,17 @@ public class CiclistaService {
         return ciclistaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Ciclista não encontrado!"));
     }
 
-
+    public Ciclista atualizarCiclista(Long id, Ciclista ciclistaDetalhes) {
+        Ciclista ciclistaExistente = ciclistaRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Ciclista não encontrado!"));
+        ciclistaExistente.setNome(ciclistaDetalhes.getNome());
+        ciclistaExistente.setEmail(ciclistaDetalhes.getEmail());
+        ciclistaExistente.setStatus(ciclistaDetalhes.getStatus());
+        ciclistaExistente.setCpf(ciclistaDetalhes.getCpf());
+        ciclistaExistente.setNascimento(ciclistaDetalhes.getNascimento());
+        ciclistaExistente.setNacionalidade(ciclistaDetalhes.getNacionalidade());
+        ciclistaExistente.setPassaporte(ciclistaDetalhes.getPassaporte());
+        ciclistaExistente.setUrlFotoDocumento(ciclistaDetalhes.getUrlFotoDocumento());
+        return ciclistaRepository.save(ciclistaExistente);
+    }
 }
