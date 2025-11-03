@@ -23,7 +23,7 @@ public class CartaoDeCreditoController {
 
     @PutMapping("/{idCiclista}")
     public ResponseEntity<CartaoDeCredito> atualizarCartaoDeCreditoPorIdCiclista(@PathVariable(value = "idCiclista") Long idCiclista, @RequestBody CartaoDeCredito cartaoDeCreditoDetalhes) {
-        CartaoDeCredito cartaoDeCredito = cartaoDeCreditoService.atualizarCartaoDeCreditoPorIdCiclista(idCiclista);
+        CartaoDeCredito cartaoDeCredito = cartaoDeCreditoService.atualizarCartaoDeCreditoPorIdCiclista(idCiclista, cartaoDeCreditoDetalhes);
         return new ResponseEntity<>(cartaoDeCredito, HttpStatus.OK);
     }
 }
