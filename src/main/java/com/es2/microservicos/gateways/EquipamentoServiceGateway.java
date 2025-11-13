@@ -16,4 +16,12 @@ public class EquipamentoServiceGateway {
     public BicicletaResponse obterBicicletaPorId(Long idCiclista) {
         return null;
     }
+
+    public BicicletaResponse obterBicicletaPorIdTranca(Long idTranca) {
+        return null;
+    }
+
+    public boolean existeTrancaPorId(Long idTranca) {
+        return true;
+    }
 }
