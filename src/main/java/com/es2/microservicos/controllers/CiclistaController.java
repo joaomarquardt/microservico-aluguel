@@ -3,6 +3,7 @@ package com.es2.microservicos.controllers;
 import com.es2.microservicos.domain.Ciclista;
 import com.es2.microservicos.dtos.requests.AtualizarCiclistaRequest;
 import com.es2.microservicos.dtos.requests.CriarCiclistaRequest;
+import com.es2.microservicos.dtos.responses.BicicletaResponse;
 import com.es2.microservicos.dtos.responses.CiclistaResponse;
 import com.es2.microservicos.services.CiclistaService;
 import org.springframework.http.HttpStatus;
@@ -49,9 +50,9 @@ public class CiclistaController {
     }
 
     @GetMapping("/{id}/bicicletaAlugada")
-    public ResponseEntity<?> obterBicicletaAlugada(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<BicicletaResponse> obterBicicletaAlugadaPorIdCiclista(@PathVariable(value = "id") Long id) {
         // TODO: Alterar tipo de variável após implementar integração com microserviço de Equipamento e criação de DTOs
-        var bicicletaAlugada = ciclistaService.obterBicicletaAlugada(id);
+        BicicletaResponse bicicletaAlugada = ciclistaService.obterBicicletaAlugadaPorIdCiclista(id);
         return new ResponseEntity<>(bicicletaAlugada, HttpStatus.OK);
     }
 

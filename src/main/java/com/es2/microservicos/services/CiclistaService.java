@@ -5,12 +5,13 @@ import com.es2.microservicos.domain.Nacionalidade;
 import com.es2.microservicos.domain.Status;
 import com.es2.microservicos.dtos.requests.AtualizarCiclistaRequest;
 import com.es2.microservicos.dtos.requests.CriarCiclistaRequest;
+import com.es2.microservicos.dtos.responses.BicicletaResponse;
 import com.es2.microservicos.dtos.responses.CiclistaResponse;
+import com.es2.microservicos.gateways.EquipamentoServiceGateway;
 import com.es2.microservicos.gateways.ExternoServiceGateway;
 import com.es2.microservicos.mappers.CiclistaMapper;
 import com.es2.microservicos.repositories.CiclistaRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,13 +19,17 @@ public class CiclistaService {
     private CiclistaMapper ciclistaMapper;
     private CiclistaRepository ciclistaRepository;
     private CartaoDeCreditoService cartaoService;
+    private AluguelService aluguelService;
     private ExternoServiceGateway externoServiceGateway;
+    private EquipamentoServiceGateway equipamentoServiceGateway;
 
-    public CiclistaService(CiclistaRepository ciclistaRepository, CiclistaMapper ciclistaMapper, CartaoDeCreditoService cartaoService, ExternoServiceGateway externoServiceGateway) {
+    public CiclistaService(CiclistaRepository ciclistaRepository, CiclistaMapper ciclistaMapper, CartaoDeCreditoService cartaoService, ExternoServiceGateway externoServiceGateway, EquipamentoServiceGateway equipamentoServiceGateway, AluguelService aluguelService) {
         this.ciclistaRepository = ciclistaRepository;
         this.ciclistaMapper = ciclistaMapper;
         this.cartaoService = cartaoService;
         this.externoServiceGateway = externoServiceGateway;
+        this.equipamentoServiceGateway = equipamentoServiceGateway;
+        this.aluguelService = aluguelService;
     }
 
     public Ciclista obterCiclistaPorId(Long id) {
@@ -88,7 +93,9 @@ public class CiclistaService {
     }
 
     // TODO: Terminar implementação de método obterBicicletaAlugada conectando com microserviço de Equipamento
-    public ResponseEntity<?> obterBicicletaAlugada(Long id) {
+    public BicicletaResponse obterBicicletaAlugadaPorIdCiclista(Long id) {
+        // TODO: Implementar lógica para analisar se o ciclista possui uma bicicleta alugada
+        equipamentoServiceGateway.obterBicicletaPorId(id);
         return null;
     }
 
