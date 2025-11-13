@@ -1,6 +1,7 @@
 package com.es2.microservicos.mappers;
 
 import com.es2.microservicos.domain.Ciclista;
+import com.es2.microservicos.dtos.requests.AtualizarCiclistaRequest;
 import com.es2.microservicos.dtos.requests.CriarCiclistaRequest;
 import com.es2.microservicos.dtos.responses.CiclistaResponse;
 import org.mapstruct.Mapper;
@@ -20,5 +21,5 @@ public interface CiclistaMapper {
     List<CiclistaResponse> toCiclistaResponseList(List<Ciclista> ciclistas);
 
     @Mapping(target = "id", ignore = true)
-    void updateCiclistaFromRequest(CriarCiclistaRequest request, Ciclista ciclista);
+    void updateCiclistaFromRequest(AtualizarCiclistaRequest request, Ciclista ciclista);
 }
