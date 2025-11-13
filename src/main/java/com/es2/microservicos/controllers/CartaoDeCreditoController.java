@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/cartaoDeCredito")
 public class CartaoDeCreditoController {
-    private CartaoDeCreditoService cartaoDeCreditoService;
+    private final CartaoDeCreditoService cartaoDeCreditoService;
 
     public CartaoDeCreditoController(CartaoDeCreditoService cartaoDeCreditoService) {
         this.cartaoDeCreditoService = cartaoDeCreditoService;
@@ -23,7 +23,7 @@ public class CartaoDeCreditoController {
     }
 
     @PutMapping("/{idCiclista}")
-    public ResponseEntity atualizarCartaoDeCreditoPorIdCiclista(@PathVariable(value = "idCiclista") Long idCiclista, @RequestBody AdicionarCartaoRequest cartaoRequest) {
+    public ResponseEntity<?> atualizarCartaoDeCreditoPorIdCiclista(@PathVariable(value = "idCiclista") Long idCiclista, @RequestBody AdicionarCartaoRequest cartaoRequest) {
         cartaoDeCreditoService.atualizarCartaoDeCreditoPorIdCiclista(idCiclista, cartaoRequest);
         return new ResponseEntity<>(HttpStatus.OK);
     }

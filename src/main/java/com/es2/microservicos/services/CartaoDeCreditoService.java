@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CartaoDeCreditoService {
-    private CartaoDeCreditoRepository cartaoDeCreditoRepository;
-    private CartaoDeCreditoMapper cartaoMapper;
-    private ExternoServiceGateway externoServiceGateway;
+    private final CartaoDeCreditoRepository cartaoDeCreditoRepository;
+    private final CartaoDeCreditoMapper cartaoMapper;
+    private final ExternoServiceGateway externoServiceGateway;
 
     public CartaoDeCreditoService(CartaoDeCreditoRepository cartaoDeCreditoRepository, CartaoDeCreditoMapper cartaoMapper, ExternoServiceGateway externoServiceGateway) {
         this.cartaoDeCreditoRepository = cartaoDeCreditoRepository;

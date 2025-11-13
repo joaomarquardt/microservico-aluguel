@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/aluguel")
 public class AluguelController {
-    private AluguelService aluguelService;
+    private final AluguelService aluguelService;
 
     public AluguelController(AluguelService aluguelService) {
         this.aluguelService = aluguelService;

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class AluguelService {
-    private AluguelRepository aluguelRepository;
+    private final AluguelRepository aluguelRepository;
 
     public AluguelService(AluguelRepository aluguelRepository) {
         this.aluguelRepository = aluguelRepository;

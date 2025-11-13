@@ -16,12 +16,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CiclistaService {
-    private CiclistaMapper ciclistaMapper;
-    private CiclistaRepository ciclistaRepository;
-    private CartaoDeCreditoService cartaoService;
-    private AluguelService aluguelService;
-    private ExternoServiceGateway externoServiceGateway;
-    private EquipamentoServiceGateway equipamentoServiceGateway;
+    private final CiclistaMapper ciclistaMapper;
+    private final CiclistaRepository ciclistaRepository;
+    private final CartaoDeCreditoService cartaoService;
+    private final AluguelService aluguelService;
+    private final ExternoServiceGateway externoServiceGateway;
+    private final EquipamentoServiceGateway equipamentoServiceGateway;
 
     public CiclistaService(CiclistaRepository ciclistaRepository, CiclistaMapper ciclistaMapper, CartaoDeCreditoService cartaoService, ExternoServiceGateway externoServiceGateway, EquipamentoServiceGateway equipamentoServiceGateway, AluguelService aluguelService) {
         this.ciclistaRepository = ciclistaRepository;

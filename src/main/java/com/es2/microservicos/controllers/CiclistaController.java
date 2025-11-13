@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/ciclista")
 public class CiclistaController {
-    private CiclistaService ciclistaService;
+    private final CiclistaService ciclistaService;
 
     public CiclistaController(CiclistaService ciclistaService) {
         this.ciclistaService = ciclistaService;

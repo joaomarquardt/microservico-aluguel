@@ -7,7 +7,7 @@ import org.springframework.web.client.RestClient;
 
 @Service
 public class EquipamentoServiceGateway {
-    private RestClient restClient;
+    private final RestClient restClient;
 
     public EquipamentoServiceGateway(@Qualifier("restClientEquipamento") RestClient restClient) {
         this.restClient = restClient;
