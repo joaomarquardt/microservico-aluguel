@@ -1,0 +1,45 @@
+name: CI com SonarCloud
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+      - develop
+
+jobs:
+  build-and-analyze:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout do Repositório
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configurar JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build, Testes e Geração de Relatório JaCoCo (Maven)
+        run: mvn -B verify
+
+      - name: Análise do SonarCloud
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarcloud.io
+        run: >
+          mvn -B sonar:sonar 
+          -Dsonar.projectKey=joaomarquardt_microservicos
+          -Dsonar.organization=joaomarquardt
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+          # Adicione o caminho do relatório JaCoCo. É o padrão do Maven
+          -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
