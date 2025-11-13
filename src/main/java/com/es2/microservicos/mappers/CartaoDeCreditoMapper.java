@@ -5,6 +5,7 @@ import com.es2.microservicos.dtos.requests.AdicionarCartaoRequest;
 import com.es2.microservicos.dtos.responses.CartaoResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
@@ -16,5 +17,5 @@ public interface CartaoDeCreditoMapper {
     CartaoResponse toCartaoResponse(CartaoDeCredito cartaoDeCredito);
 
     @Mapping(target = "id", ignore = true)
-    void updateCartaoDeCreditoFromRequest(AdicionarCartaoRequest request, CartaoDeCredito cartaoDeCredito);
+    void updateCartaoDeCreditoFromRequest(AdicionarCartaoRequest request, @MappingTarget CartaoDeCredito cartaoDeCredito);
 }

@@ -6,6 +6,7 @@ import com.es2.microservicos.dtos.requests.CriarCiclistaRequest;
 import com.es2.microservicos.dtos.responses.CiclistaResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
@@ -21,5 +22,5 @@ public interface CiclistaMapper {
     List<CiclistaResponse> toCiclistaResponseList(List<Ciclista> ciclistas);
 
     @Mapping(target = "id", ignore = true)
-    void updateCiclistaFromRequest(AtualizarCiclistaRequest request, Ciclista ciclista);
+    void updateCiclistaFromRequest(AtualizarCiclistaRequest request, @MappingTarget Ciclista ciclista);
 }
