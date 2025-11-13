@@ -14,16 +14,18 @@ public class CartaoDeCredito {
     private String numeroCartao;
     private LocalDate dataValidade;
     private String codigoSeguranca;
+    private Ciclista ciclista;
 
     public CartaoDeCredito() {
     }
 
-    public CartaoDeCredito(Long id, String nomeTitular, String numeroCartao, LocalDate dataValidade, String codigoSeguranca) {
+    public CartaoDeCredito(Long id, String nomeTitular, String numeroCartao, LocalDate dataValidade, String codigoSeguranca, Ciclista ciclista) {
         this.id = id;
         this.nomeTitular = nomeTitular;
         this.numeroCartao = numeroCartao;
         this.dataValidade = dataValidade;
         this.codigoSeguranca = codigoSeguranca;
+        this.ciclista = ciclista;
     }
 
     public Long getId() {
@@ -64,5 +66,13 @@ public class CartaoDeCredito {
 
     public void setCodigoSeguranca(String codigoSeguranca) {
         this.codigoSeguranca = codigoSeguranca;
+    }
+
+    public Ciclista getCiclista() {
+        return ciclista;
+    }
+
+    public void setCiclista(Ciclista ciclista) {
+        this.ciclista = ciclista;
     }
 }
