@@ -19,17 +19,15 @@ public class CiclistaService {
     private final CiclistaMapper ciclistaMapper;
     private final CiclistaRepository ciclistaRepository;
     private final CartaoDeCreditoService cartaoService;
-    private final AluguelService aluguelService;
     private final ExternoServiceGateway externoServiceGateway;
     private final EquipamentoServiceGateway equipamentoServiceGateway;
 
-    public CiclistaService(CiclistaRepository ciclistaRepository, CiclistaMapper ciclistaMapper, CartaoDeCreditoService cartaoService, ExternoServiceGateway externoServiceGateway, EquipamentoServiceGateway equipamentoServiceGateway, AluguelService aluguelService) {
+    public CiclistaService(CiclistaRepository ciclistaRepository, CiclistaMapper ciclistaMapper, CartaoDeCreditoService cartaoService, ExternoServiceGateway externoServiceGateway, EquipamentoServiceGateway equipamentoServiceGateway) {
         this.ciclistaRepository = ciclistaRepository;
         this.ciclistaMapper = ciclistaMapper;
         this.cartaoService = cartaoService;
         this.externoServiceGateway = externoServiceGateway;
         this.equipamentoServiceGateway = equipamentoServiceGateway;
-        this.aluguelService = aluguelService;
     }
 
     public Ciclista obterCiclistaPorId(Long id) {
