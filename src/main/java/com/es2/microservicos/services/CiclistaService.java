@@ -16,10 +16,12 @@ import org.springframework.stereotype.Service;
 public class CiclistaService {
     private CiclistaMapper ciclistaMapper;
     private CiclistaRepository ciclistaRepository;
+    private CartaoDeCreditoService cartaoService;
 
-    public CiclistaService(CiclistaRepository ciclistaRepository, CiclistaMapper ciclistaMapper) {
+    public CiclistaService(CiclistaRepository ciclistaRepository, CiclistaMapper ciclistaMapper, CartaoDeCreditoService cartaoService) {
         this.ciclistaRepository = ciclistaRepository;
         this.ciclistaMapper = ciclistaMapper;
+        this.cartaoService = cartaoService;
     }
 
     public Ciclista obterCiclistaPorId(Long id) {
@@ -44,6 +46,7 @@ public class CiclistaService {
         Ciclista ciclista = ciclistaMapper.toCiclista(ciclistaRequest);
         ciclista.setStatus(Status.INATIVO);
         Ciclista ciclistaSalvo = ciclistaRepository.save(ciclista);
+        cartaoService.cadastrarCartaoDeCredito(ciclistaRequest.cartaoDeCredito(), ciclistaSalvo);
         // TODO: Email de confirmação de cadastro via microserviço Externo (Passo 9 - UC01)
         return ciclistaMapper.toCiclistaResponse(ciclistaSalvo);
     }
