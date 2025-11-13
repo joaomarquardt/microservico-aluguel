@@ -2,6 +2,7 @@ package com.es2.microservicos.gateways;
 
 import com.es2.microservicos.dtos.requests.AdicionarCartaoRequest;
 import com.es2.microservicos.dtos.requests.NotificacaoRequest;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -9,10 +10,8 @@ import org.springframework.web.client.RestClient;
 public class ExternoServiceGateway {
     private final RestClient restClient;
 
-    public ExternoServiceGateway(RestClient restClient) {
-        this.restClient = RestClient.builder()
-                .baseUrl("http://externo-microservico/api") // TODO: Definir a URL base do microserviço Externo
-                .build();
+    public ExternoServiceGateway(@Qualifier("restClientExterno") RestClient restClient) {
+        this.restClient = restClient;
     }
 
     public boolean confirmacaoCadastroEmail(String nomeDestinario, String emailDestinatario) {
