@@ -1,6 +1,7 @@
 package com.es2.microservicos.controllers;
 
 import com.es2.microservicos.domain.Ciclista;
+import com.es2.microservicos.dtos.requests.AtualizarCiclistaRequest;
 import com.es2.microservicos.dtos.requests.CriarCiclistaRequest;
 import com.es2.microservicos.dtos.responses.CiclistaResponse;
 import com.es2.microservicos.services.CiclistaService;
@@ -30,8 +31,8 @@ public class CiclistaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Ciclista> atualizarCiclista(@PathVariable(value = "id") Long id, @RequestBody Ciclista ciclistaDetalhes) {
-        Ciclista ciclistaAtualizado = ciclistaService.atualizarCiclista(id, ciclistaDetalhes);
+    public ResponseEntity<CiclistaResponse> atualizarCiclista(@PathVariable(value = "id") Long id, @RequestBody AtualizarCiclistaRequest ciclistaRequest) {
+        CiclistaResponse ciclistaAtualizado = ciclistaService.atualizarCiclista(id, ciclistaRequest);
         return new ResponseEntity<>(ciclistaAtualizado, HttpStatus.OK);
     }
 

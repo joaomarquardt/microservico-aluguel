@@ -3,6 +3,7 @@ package com.es2.microservicos.services;
 import com.es2.microservicos.domain.Ciclista;
 import com.es2.microservicos.domain.Nacionalidade;
 import com.es2.microservicos.domain.Status;
+import com.es2.microservicos.dtos.requests.AtualizarCiclistaRequest;
 import com.es2.microservicos.dtos.requests.CriarCiclistaRequest;
 import com.es2.microservicos.dtos.responses.CiclistaResponse;
 import com.es2.microservicos.mappers.CiclistaMapper;
@@ -46,18 +47,22 @@ public class CiclistaService {
         return ciclistaMapper.toCiclistaResponse(ciclistaSalvo);
     }
 
-    public Ciclista atualizarCiclista(Long id, Ciclista ciclistaDetalhes) {
-        Ciclista ciclistaExistente = ciclistaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Ciclista não encontrado!"));
-        ciclistaExistente.setNome(ciclistaDetalhes.getNome());
-        ciclistaExistente.setEmail(ciclistaDetalhes.getEmail());
-        ciclistaExistente.setStatus(ciclistaDetalhes.getStatus());
-        ciclistaExistente.setCpf(ciclistaDetalhes.getCpf());
-        ciclistaExistente.setNascimento(ciclistaDetalhes.getNascimento());
-        ciclistaExistente.setNacionalidade(ciclistaDetalhes.getNacionalidade());
-        ciclistaExistente.setPassaporte(ciclistaDetalhes.getPassaporte());
-        ciclistaExistente.setUrlFotoDocumento(ciclistaDetalhes.getUrlFotoDocumento());
-        return ciclistaRepository.save(ciclistaExistente);
+    public CiclistaResponse atualizarCiclista(Long id, AtualizarCiclistaRequest ciclistaRequest) {
+        Ciclista ciclista = obterCiclistaPorId(id);
+        // TODO: Separar lógicas abaixo em um método privado para reutilização
+        if (ciclistaRequest.nacionalidade() == Nacionalidade.BRASILEIRO && ciclistaRequest.cpf() == null) {
+            throw new IllegalArgumentException("Ciclistas brasileiros devem fornecer CPF!");
+        }
+        if (ciclistaRequest.nacionalidade() == Nacionalidade.ESTRANGEIRO && (ciclistaRequest.passaporte() == null || ciclistaRequest.passaporte().pais().isBlank())) {
+            throw new IllegalArgumentException("Ciclistas estrangeiros devem fornecer passaporte!");
+        }
+        if (!ciclistaRequest.senha().equals(ciclistaRequest.confirmacaoSenha())) {
+            throw new IllegalArgumentException("Senha e confirmação de senha não coincidem!");
+        }
+        ciclistaMapper.updateCiclistaFromRequest(ciclistaRequest, ciclista);
+        Ciclista ciclistaAtualizado = ciclistaRepository.save(ciclista);
+        // TODO: Email de atualização de dados via microserviço Externo (Passo 4 - UC06)
+        return ciclistaMapper.toCiclistaResponse(ciclistaAtualizado);
     }
 
     public Ciclista ativarCiclista(Long id) {
