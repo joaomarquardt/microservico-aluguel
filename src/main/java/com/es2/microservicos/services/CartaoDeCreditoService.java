@@ -32,12 +32,14 @@ public class CartaoDeCreditoService {
     }
 
 
-    public CartaoDeCredito atualizarCartaoDeCreditoPorIdCiclista(Long idCiclista, CartaoDeCredito cartaoDeCreditoDetalhes) {
-        CartaoDeCredito cartaoDeCredito = cartaoDeCreditoRepository.findByCiclistaId(idCiclista);
-        cartaoDeCredito.setNomeTitular(cartaoDeCreditoDetalhes.getNomeTitular());
-        cartaoDeCredito.setNumeroCartao(cartaoDeCreditoDetalhes.getNumeroCartao());
-        cartaoDeCredito.setDataValidade(cartaoDeCreditoDetalhes.getDataValidade());
-        cartaoDeCredito.setCodigoSeguranca(cartaoDeCreditoDetalhes.getCodigoSeguranca());
-        return cartaoDeCreditoRepository.save(cartaoDeCredito);
+    public void atualizarCartaoDeCreditoPorIdCiclista(Long idCiclista, AdicionarCartaoRequest cartaoRequest) {
+        CartaoDeCredito cartaoExistente = cartaoDeCreditoRepository.findByCiclistaId(idCiclista);
+        if (cartaoExistente == null) {
+            throw new IllegalArgumentException("Cartão de crédito não encontrado para o ciclista com ID: " + idCiclista);
+        }
+        // TODO: Validar dados do cartão de crédito no microserviço Externo (Passo 3 - UC07)
+        cartaoMapper.updateCartaoDeCreditoFromRequest(cartaoRequest, cartaoExistente);
+        cartaoDeCreditoRepository.save(cartaoExistente);
+        // TODO: Notificar email do Ciclista sobre atualização do cartão de crédito no microserviço Externo (Passo 5 - UC07)
     }
 }
