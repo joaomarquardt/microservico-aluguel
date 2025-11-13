@@ -1,6 +1,8 @@
 package com.es2.microservicos.controllers;
 
 import com.es2.microservicos.domain.Ciclista;
+import com.es2.microservicos.dtos.requests.CriarCiclistaRequest;
+import com.es2.microservicos.dtos.responses.CiclistaResponse;
 import com.es2.microservicos.services.CiclistaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,12 @@ public class CiclistaController {
     public ResponseEntity<Ciclista> obterCiclistaPorId(@PathVariable(value = "id") Long id) {
         Ciclista ciclista = ciclistaService.obterCiclistaPorId(id);
         return new ResponseEntity<>(ciclista, HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<CiclistaResponse> criarCiclista(@RequestBody CriarCiclistaRequest ciclistaRequest) {
+        CiclistaResponse novoCiclista = ciclistaService.criarCiclista(ciclistaRequest);
+        return new ResponseEntity<>(novoCiclista, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
