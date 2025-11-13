@@ -1,11 +1,13 @@
-FROM eclipse-temurin:21-jdk-alpine AS build
+FROM eclipse-temurin:21-jdk AS build
 WORKDIR /app
-RUN apk add --no-cache bash maven git
-COPY pom.xml .
-COPY src ./src
-RUN mvn clean package
-FROM eclipse-temurin:21-jdk-alpine
+COPY . .
+RUN chmod +x mvnw
+RUN ./mvnw clean package -DskipTests
+
+FROM eclipse-temurin:21-jre as runtime
 WORKDIR /app
-COPY --from=build /app/target/*-SNAPSHOT.jar app.jar
+COPY --from=build /app/target/*.jar app.jar
+
+ENV PORT=8080
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
