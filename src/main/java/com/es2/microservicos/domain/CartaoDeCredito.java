@@ -14,6 +14,8 @@ public class CartaoDeCredito {
     private String numeroCartao;
     private LocalDate dataValidade;
     private String codigoSeguranca;
+    @ManyToOne
+    @JoinColumn(name = "ciclista_id")
     private Ciclista ciclista;
 
     public CartaoDeCredito() {

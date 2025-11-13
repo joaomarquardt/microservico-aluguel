@@ -12,10 +12,14 @@ public class Ciclista {
     private Long id;
     private String nome;
     private String email;
+    @Enumerated(EnumType.STRING)
     private Status status;
     private String cpf;
     private LocalDate nascimento;
+    @Enumerated(EnumType.STRING)
     private Nacionalidade nacionalidade;
+    @OneToOne
+    @JoinColumn(name = "passaporte_id")
     private Passaporte passaporte;
     private String urlFotoDocumento;
 

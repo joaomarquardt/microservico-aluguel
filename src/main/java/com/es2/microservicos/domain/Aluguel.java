@@ -11,6 +11,8 @@ public class Aluguel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long bicicletaId;
+    @ManyToOne
+    @JoinColumn(name = "ciclista_id")
     private Ciclista ciclista;
     private LocalDateTime horaInicio;
     private LocalDateTime horaFim;

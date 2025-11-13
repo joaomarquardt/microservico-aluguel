@@ -1,9 +1,11 @@
 package com.es2.microservicos.dtos.requests;
 
+import java.time.LocalDate;
+
 public record AdicionarCartaoRequest(
         String nomeTitular,
         String numeroCartao,
-        String dataValidade,
+        LocalDate dataValidade,
         String codigoSeguranca
 ) {
 }
