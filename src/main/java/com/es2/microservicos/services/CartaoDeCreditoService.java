@@ -4,6 +4,7 @@ import com.es2.microservicos.domain.CartaoDeCredito;
 import com.es2.microservicos.domain.Ciclista;
 import com.es2.microservicos.dtos.requests.AdicionarCartaoRequest;
 import com.es2.microservicos.dtos.responses.CartaoResponse;
+import com.es2.microservicos.gateways.ExternoServiceGateway;
 import com.es2.microservicos.mappers.CartaoDeCreditoMapper;
 import com.es2.microservicos.repositories.CartaoDeCreditoRepository;
 import org.springframework.stereotype.Service;
@@ -12,10 +13,12 @@ import org.springframework.stereotype.Service;
 public class CartaoDeCreditoService {
     private CartaoDeCreditoRepository cartaoDeCreditoRepository;
     private CartaoDeCreditoMapper cartaoMapper;
+    private ExternoServiceGateway externoServiceGateway;
 
-    public CartaoDeCreditoService(CartaoDeCreditoRepository cartaoDeCreditoRepository, CartaoDeCreditoMapper cartaoMapper) {
+    public CartaoDeCreditoService(CartaoDeCreditoRepository cartaoDeCreditoRepository, CartaoDeCreditoMapper cartaoMapper, ExternoServiceGateway externoServiceGateway) {
         this.cartaoDeCreditoRepository = cartaoDeCreditoRepository;
         this.cartaoMapper = cartaoMapper;
+        this.externoServiceGateway = externoServiceGateway;
     }
 
     public CartaoResponse cadastrarCartaoDeCredito(AdicionarCartaoRequest cartaoRequest, Ciclista ciclista) {
@@ -37,9 +40,10 @@ public class CartaoDeCreditoService {
         if (cartaoExistente == null) {
             throw new IllegalArgumentException("Cartão de crédito não encontrado para o ciclista com ID: " + idCiclista);
         }
-        // TODO: Validar dados do cartão de crédito no microserviço Externo (Passo 3 - UC07)
+        externoServiceGateway.validacaoCartaoDeCredito(cartaoRequest);
         cartaoMapper.updateCartaoDeCreditoFromRequest(cartaoRequest, cartaoExistente);
         cartaoDeCreditoRepository.save(cartaoExistente);
-        // TODO: Notificar email do Ciclista sobre atualização do cartão de crédito no microserviço Externo (Passo 5 - UC07)
+        Ciclista ciclista = cartaoExistente.getCiclista();
+        externoServiceGateway.atualizacaoCartaoEmail(ciclista.getNome(), ciclista.getEmail());
     }
 }
