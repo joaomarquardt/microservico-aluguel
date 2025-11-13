@@ -42,6 +42,7 @@ public class CiclistaService {
         }
         // TODO: Validação de cartão de crédito via microserviço Externo (Passo 7 - UC01)
         Ciclista ciclista = ciclistaMapper.toCiclista(ciclistaRequest);
+        ciclista.setStatus(Status.INATIVO);
         Ciclista ciclistaSalvo = ciclistaRepository.save(ciclista);
         // TODO: Email de confirmação de cadastro via microserviço Externo (Passo 9 - UC01)
         return ciclistaMapper.toCiclistaResponse(ciclistaSalvo);
@@ -65,10 +66,14 @@ public class CiclistaService {
         return ciclistaMapper.toCiclistaResponse(ciclistaAtualizado);
     }
 
-    public Ciclista ativarCiclista(Long id) {
-        Ciclista ciclistaExistente = ciclistaRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Ciclista não encontrado!"));
-        ciclistaExistente.setStatus(Status.ATIVO);
-        return ciclistaRepository.save(ciclistaExistente);
+    public CiclistaResponse ativarCiclista(Long id) {
+        Ciclista ciclista = obterCiclistaPorId(id);
+        if (ciclista.getStatus() == Status.ATIVO) {
+            throw new IllegalArgumentException("Ciclista já está ativo!");
+        }
+        ciclista.setStatus(Status.ATIVO);
+        Ciclista ciclistaSalvo = ciclistaRepository.save(ciclista);
+        return ciclistaMapper.toCiclistaResponse(ciclistaSalvo);
     }
 
     // TODO: Implementar método verificarPermissaoAluguel

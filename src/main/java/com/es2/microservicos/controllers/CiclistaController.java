@@ -37,8 +37,8 @@ public class CiclistaController {
     }
 
     @PostMapping("/{id}/ativar")
-    public ResponseEntity<Ciclista> ativarCiclista(@PathVariable(value = "id") Long id) {
-        Ciclista novoCiclista = ciclistaService.ativarCiclista(id);
+    public ResponseEntity<CiclistaResponse> ativarCiclista(@PathVariable(value = "id") Long id) {
+        CiclistaResponse novoCiclista = ciclistaService.ativarCiclista(id);
         return new ResponseEntity<>(novoCiclista, HttpStatus.OK);
     }
 
