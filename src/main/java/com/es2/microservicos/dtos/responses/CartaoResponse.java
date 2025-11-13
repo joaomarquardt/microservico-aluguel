@@ -1,9 +1,11 @@
 package com.es2.microservicos.dtos.responses;
 
+import java.time.LocalDate;
+
 public record CartaoResponse(
         String nomeTitular,
         String numeroCartao,
-        String dataValidade,
+        LocalDate dataValidade,
         String codigoSeguranca
 ) {
 }
