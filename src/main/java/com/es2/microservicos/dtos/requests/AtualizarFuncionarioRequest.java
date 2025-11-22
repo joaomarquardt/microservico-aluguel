@@ -7,6 +7,6 @@ public record AtualizarFuncionarioRequest(
         String confirmacaoSenha,
         String cpf,
         Integer idade,
-        String funcao
+        Funcao funcao
 ) {
 }

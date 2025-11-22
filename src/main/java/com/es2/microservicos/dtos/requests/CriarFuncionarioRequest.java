@@ -1,5 +1,7 @@
 package com.es2.microservicos.dtos.requests;
 
+import com.es2.microservicos.domain.Funcao;
+
 public record CriarFuncionarioRequest(
         String nome,
         String email,
@@ -7,6 +9,6 @@ public record CriarFuncionarioRequest(
         String confirmacaoSenha,
         String cpf,
         Integer idade,
-        String funcao
+        Funcao funcao
 ) {
 }

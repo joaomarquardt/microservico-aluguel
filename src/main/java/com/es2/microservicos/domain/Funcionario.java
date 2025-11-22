@@ -15,12 +15,12 @@ public class Funcionario {
     private String confirmacaoSenha;
     private String cpf;
     private Integer idade;
-    private String funcao;
+    private Funcao funcao;
 
     public Funcionario() {
     }
 
-    public Funcionario(Long id, String matricula, String nome, String email, String senha, String confirmacaoSenha, String cpf, Integer idade, String funcao) {
+    public Funcionario(Long id, String matricula, String nome, String email, String senha, String confirmacaoSenha, String cpf, Integer idade, Funcao funcao) {
         this.id = id;
         this.matricula = matricula;
         this.nome = nome;
@@ -96,11 +96,11 @@ public class Funcionario {
         this.idade = idade;
     }
 
-    public String getFuncao() {
+    public Funcao getFuncao() {
         return funcao;
     }
 
-    public void setFuncao(String funcao) {
+    public void setFuncao(Funcao funcao) {
         this.funcao = funcao;
     }
 }
