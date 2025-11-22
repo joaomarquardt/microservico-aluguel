@@ -1,6 +1,10 @@
 package com.es2.microservicos.services;
 
 import com.es2.microservicos.domain.Funcionario;
+import com.es2.microservicos.dtos.requests.AtualizarFuncionarioRequest;
+import com.es2.microservicos.dtos.requests.CriarFuncionarioRequest;
+import com.es2.microservicos.dtos.responses.FuncionarioResponse;
+import com.es2.microservicos.mappers.FuncionarioMapper;
 import com.es2.microservicos.repositories.FuncionarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
@@ -10,38 +14,42 @@ import java.util.List;
 @Service
 public class FuncionarioService {
     private final FuncionarioRepository funcionarioRepository;
+    private final FuncionarioMapper funcionarioMapper;
 
-    public FuncionarioService(FuncionarioRepository funcionarioRepository) {
+    public FuncionarioService(FuncionarioRepository funcionarioRepository, FuncionarioMapper funcionarioMapper) {
+        this.funcionarioMapper = funcionarioMapper;
         this.funcionarioRepository = funcionarioRepository;
     }
 
-    public List<Funcionario> listarFuncionarios() {
-        return funcionarioRepository.findAll();
+    public List<FuncionarioResponse> listarFuncionarios() {
+        List<Funcionario> funcionarios = funcionarioRepository.findAll();
+        return funcionarioMapper.toFuncionarioResponseList(funcionarios);
     }
 
-    public Funcionario obterFuncionarioPorId(Long id) {
+    public FuncionarioResponse obterFuncionarioPorId(Long id) {
+        Funcionario funcionario = obterEntidadeFuncionarioPorId(id);
+        return funcionarioMapper.toFuncionarioResponse(funcionario);
+    }
+
+    public Funcionario obterEntidadeFuncionarioPorId(Long id) {
         return funcionarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Funcionário não encontrado!"));
     }
 
-    public Funcionario criarFuncionario(Funcionario funcionario) {
-        return funcionarioRepository.save(funcionario);
+    public FuncionarioResponse criarFuncionario(CriarFuncionarioRequest funcionarioRequest) {
+        Funcionario funcionario = funcionarioMapper.toFuncionario(funcionarioRequest);
+        Funcionario funcionarioSalvo = funcionarioRepository.save(funcionario);
+        return funcionarioMapper.toFuncionarioResponse(funcionarioSalvo);
     }
 
-    public Funcionario atualizarFuncionario(Long id, Funcionario funcionarioDetalhes) {
-        Funcionario funcionarioExistente = funcionarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Funcionário não encontrado!"));
-        funcionarioExistente.setMatricula(funcionarioDetalhes.getMatricula());
-        funcionarioExistente.setNome(funcionarioDetalhes.getNome());
-        funcionarioExistente.setEmail(funcionarioDetalhes.getEmail());
-        funcionarioExistente.setSenha(funcionarioDetalhes.getSenha());
-        funcionarioExistente.setConfirmacaoSenha(funcionarioDetalhes.getConfirmacaoSenha());
-        funcionarioExistente.setCpf(funcionarioDetalhes.getCpf());
-        funcionarioExistente.setIdade(funcionarioDetalhes.getIdade());
-        funcionarioExistente.setFuncao(funcionarioDetalhes.getFuncao());
-        return funcionarioRepository.save(funcionarioExistente);
+    public FuncionarioResponse atualizarFuncionario(Long id, AtualizarFuncionarioRequest funcionarioRequest) {
+        Funcionario funcionarioExistente = obterEntidadeFuncionarioPorId(id);
+        funcionarioMapper.updateFuncionarioFromRequest(funcionarioRequest, funcionarioExistente);
+        Funcionario funcionarioAtualizado = funcionarioRepository.save(funcionarioExistente);
+        return funcionarioMapper.toFuncionarioResponse(funcionarioAtualizado);
     }
 
     public void deletarFuncionario(Long id) {
-        Funcionario funcionarioExistente = funcionarioRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Funcionário não encontrado!"));
+        Funcionario funcionarioExistente = obterEntidadeFuncionarioPorId(id);
         funcionarioRepository.delete(funcionarioExistente);
     }
 }

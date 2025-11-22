@@ -1,6 +1,9 @@
 package com.es2.microservicos.controllers;
 
 import com.es2.microservicos.domain.Funcionario;
+import com.es2.microservicos.dtos.requests.AtualizarFuncionarioRequest;
+import com.es2.microservicos.dtos.requests.CriarFuncionarioRequest;
+import com.es2.microservicos.dtos.responses.FuncionarioResponse;
 import com.es2.microservicos.services.FuncionarioService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,26 +21,26 @@ public class FuncionarioController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Funcionario>> listarFuncionarios() {
-        List<Funcionario> funcionarios = funcionarioService.listarFuncionarios();
+    public ResponseEntity<List<FuncionarioResponse>> listarFuncionarios() {
+        List<FuncionarioResponse> funcionarios = funcionarioService.listarFuncionarios();
         return new ResponseEntity<>(funcionarios, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Funcionario> obterFuncionarioPorId(@PathVariable(value = "id") Long id) {
-        Funcionario funcionario = funcionarioService.obterFuncionarioPorId(id);
+    public ResponseEntity<FuncionarioResponse> obterFuncionarioPorId(@PathVariable(value = "id") Long id) {
+        FuncionarioResponse funcionario = funcionarioService.obterFuncionarioPorId(id);
         return new ResponseEntity<>(funcionario, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<Funcionario> criarFuncionario(@RequestBody Funcionario funcionario) {
-        Funcionario novoFuncionario = funcionarioService.criarFuncionario(funcionario);
+    public ResponseEntity<FuncionarioResponse> criarFuncionario(@RequestBody CriarFuncionarioRequest funcionario) {
+        FuncionarioResponse novoFuncionario = funcionarioService.criarFuncionario(funcionario);
         return new ResponseEntity<>(novoFuncionario, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Funcionario> atualizarFuncionario(@PathVariable(value = "id") Long id, @RequestBody Funcionario funcionarioDetalhes) {
-        Funcionario funcionarioAtualizado = funcionarioService.atualizarFuncionario(id, funcionarioDetalhes);
+    public ResponseEntity<FuncionarioResponse> atualizarFuncionario(@PathVariable(value = "id") Long id, @RequestBody AtualizarFuncionarioRequest funcionarioDetalhes) {
+        FuncionarioResponse funcionarioAtualizado = funcionarioService.atualizarFuncionario(id, funcionarioDetalhes);
         return new ResponseEntity<>(funcionarioAtualizado, HttpStatus.OK);
     }
 
