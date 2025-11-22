@@ -9,6 +9,7 @@ import com.es2.microservicos.repositories.FuncionarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -37,6 +38,7 @@ public class FuncionarioService {
 
     public FuncionarioResponse criarFuncionario(CriarFuncionarioRequest funcionarioRequest) {
         Funcionario funcionario = funcionarioMapper.toFuncionario(funcionarioRequest);
+        funcionario.setMatricula(gerarMatricula());
         Funcionario funcionarioSalvo = funcionarioRepository.save(funcionario);
         return funcionarioMapper.toFuncionarioResponse(funcionarioSalvo);
     }
@@ -51,5 +53,11 @@ public class FuncionarioService {
     public void deletarFuncionario(Long id) {
         Funcionario funcionarioExistente = obterEntidadeFuncionarioPorId(id);
         funcionarioRepository.delete(funcionarioExistente);
+    }
+
+    private String gerarMatricula() {
+        String prefixo = "FUNC";
+        long contador = funcionarioRepository.count() + 1;
+        return prefixo + String.format("%05d", contador);
     }
 }
