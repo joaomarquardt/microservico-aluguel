@@ -3,6 +3,7 @@ package com.es2.microservicos.gateways;
 import com.es2.microservicos.dtos.requests.AdicionarCartaoRequest;
 import com.es2.microservicos.dtos.requests.NotificacaoRequest;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 
@@ -14,27 +15,27 @@ public class ExternoServiceGateway {
         this.restClient = restClient;
     }
 
-    public boolean confirmacaoCadastroEmail(String nomeDestinario, String emailDestinatario) {
+    public ResponseEntity confirmacaoCadastroEmail(String nomeDestinario, String emailDestinatario) {
         NotificacaoRequest notificacaoRequest = new NotificacaoRequest(nomeDestinario, emailDestinatario);
         // TODO: Implementar chamada ao endpoint de notificação do microserviço Externo
-        return true;
+        return ResponseEntity.ok().build();
     }
 
-    public boolean atualizacaoCiclistaEmail(String nomeDestinario, String emailDestinatario) {
+    public ResponseEntity atualizacaoCiclistaEmail(String nomeDestinario, String emailDestinatario) {
         NotificacaoRequest notificacaoRequest = new NotificacaoRequest(nomeDestinario, emailDestinatario);
         // TODO: Implementar chamada ao endpoint de notificação do microserviço Externo
-        return true;
+        return ResponseEntity.ok().build();
     }
 
-    public boolean atualizacaoCartaoEmail(String nomeDestinario, String emailDestinatario) {
+    public ResponseEntity atualizacaoCartaoEmail(String nomeDestinario, String emailDestinatario) {
         NotificacaoRequest notificacaoRequest = new NotificacaoRequest(nomeDestinario, emailDestinatario);
         // TODO: Implementar chamada ao endpoint de notificação do microserviço Externo
-        return true;
+        return ResponseEntity.ok().build();
     }
 
-    public boolean validacaoCartaoDeCredito(AdicionarCartaoRequest cartaoRequest) {
+    public ResponseEntity validacaoCartaoDeCredito(AdicionarCartaoRequest cartaoRequest) {
         // TODO: Implementar chamada ao endpoint de notificação do microserviço Externo
-        return true;
+        return ResponseEntity.ok().build();
     }
 
 
