@@ -37,6 +37,9 @@ public class FuncionarioService {
     }
 
     public FuncionarioResponse criarFuncionario(CriarFuncionarioRequest funcionarioRequest) {
+        if (!funcionarioRequest.senha().equals(funcionarioRequest.confirmacaoSenha())) {
+            throw new IllegalArgumentException("Senha e confirmação de senha não coincidem!");
+        }
         Funcionario funcionario = funcionarioMapper.toFuncionario(funcionarioRequest);
         funcionario.setMatricula(gerarMatricula());
         Funcionario funcionarioSalvo = funcionarioRepository.save(funcionario);
@@ -44,6 +47,9 @@ public class FuncionarioService {
     }
 
     public FuncionarioResponse atualizarFuncionario(Long id, AtualizarFuncionarioRequest funcionarioRequest) {
+        if (!funcionarioRequest.senha().equals(funcionarioRequest.confirmacaoSenha())) {
+            throw new IllegalArgumentException("Senha e confirmação de senha não coincidem!");
+        }
         Funcionario funcionarioExistente = obterEntidadeFuncionarioPorId(id);
         funcionarioMapper.updateFuncionarioFromRequest(funcionarioRequest, funcionarioExistente);
         Funcionario funcionarioAtualizado = funcionarioRepository.save(funcionarioExistente);

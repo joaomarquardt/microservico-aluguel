@@ -12,6 +12,8 @@ import com.es2.microservicos.gateways.ExternoServiceGateway;
 import com.es2.microservicos.mappers.CiclistaMapper;
 import com.es2.microservicos.repositories.CiclistaRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -48,7 +50,10 @@ public class CiclistaService {
         if (!ciclistaRequest.senha().equals(ciclistaRequest.confirmacaoSenha())) {
             throw new IllegalArgumentException("Senha e confirmação de senha não coincidem!");
         }
-        externoServiceGateway.validacaoCartaoDeCredito(ciclistaRequest.cartaoDeCredito());
+        ResponseEntity validacaoCartaoResponse = externoServiceGateway.validacaoCartaoDeCredito(ciclistaRequest.cartaoDeCredito());
+        if (validacaoCartaoResponse.getStatusCode() != HttpStatus.OK) {
+            throw new IllegalArgumentException("Cartão de crédito inválido!");
+        }
         Ciclista ciclista = ciclistaMapper.toCiclista(ciclistaRequest);
         ciclista.setStatus(Status.INATIVO);
         Ciclista ciclistaSalvo = ciclistaRepository.save(ciclista);
@@ -71,7 +76,10 @@ public class CiclistaService {
         }
         ciclistaMapper.updateCiclistaFromRequest(ciclistaRequest, ciclista);
         Ciclista ciclistaAtualizado = ciclistaRepository.save(ciclista);
-        externoServiceGateway.atualizacaoCiclistaEmail(ciclistaAtualizado.getNome(), ciclistaAtualizado.getEmail());
+        ResponseEntity atualizacaoCiclistaEmailResponse = externoServiceGateway.atualizacaoCiclistaEmail(ciclistaAtualizado.getNome(), ciclistaAtualizado.getEmail());
+        if (atualizacaoCiclistaEmailResponse.getStatusCode() != HttpStatus.OK) {
+            throw new IllegalArgumentException("Erro ao enviar email de atualização de ciclista!");
+        }
         return ciclistaMapper.toCiclistaResponse(ciclistaAtualizado);
     }
 
@@ -81,6 +89,7 @@ public class CiclistaService {
             throw new IllegalArgumentException("Ciclista já está ativo!");
         }
         ciclista.setStatus(Status.ATIVO);
+        // TODO: Verificar se passo 3 do UC02 de registro da data/hora deve ser implementado
         Ciclista ciclistaSalvo = ciclistaRepository.save(ciclista);
         return ciclistaMapper.toCiclistaResponse(ciclistaSalvo);
     }

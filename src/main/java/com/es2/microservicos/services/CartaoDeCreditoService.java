@@ -7,6 +7,8 @@ import com.es2.microservicos.dtos.responses.CartaoResponse;
 import com.es2.microservicos.gateways.ExternoServiceGateway;
 import com.es2.microservicos.mappers.CartaoDeCreditoMapper;
 import com.es2.microservicos.repositories.CartaoDeCreditoRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -40,10 +42,16 @@ public class CartaoDeCreditoService {
         if (cartaoExistente == null) {
             throw new IllegalArgumentException("Cartão de crédito não encontrado para o ciclista com ID: " + idCiclista);
         }
-        externoServiceGateway.validacaoCartaoDeCredito(cartaoRequest);
+        ResponseEntity validacaoCartaoResponse = externoServiceGateway.validacaoCartaoDeCredito(cartaoRequest);
+        if (validacaoCartaoResponse.getStatusCode() != HttpStatus.OK) {
+            throw new IllegalArgumentException("Cartão de crédito inválido!");
+        }
         cartaoMapper.updateCartaoDeCreditoFromRequest(cartaoRequest, cartaoExistente);
         cartaoDeCreditoRepository.save(cartaoExistente);
         Ciclista ciclista = cartaoExistente.getCiclista();
-        externoServiceGateway.atualizacaoCartaoEmail(ciclista.getNome(), ciclista.getEmail());
+        ResponseEntity atualizacaoCartaoEmailResponse = externoServiceGateway.atualizacaoCartaoEmail(ciclista.getNome(), ciclista.getEmail());
+        if (atualizacaoCartaoEmailResponse.getStatusCode() != HttpStatus.OK) {
+            throw new IllegalArgumentException("Erro ao enviar email de atualização do cartão de crédito!");
+        }
     }
 }
