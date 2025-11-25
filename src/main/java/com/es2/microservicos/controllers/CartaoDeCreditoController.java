@@ -1,7 +1,7 @@
 package com.es2.microservicos.controllers;
 
-import com.es2.microservicos.domain.CartaoDeCredito;
 import com.es2.microservicos.dtos.requests.AdicionarCartaoRequest;
+import com.es2.microservicos.dtos.responses.CartaoResponse;
 import com.es2.microservicos.services.CartaoDeCreditoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +17,8 @@ public class CartaoDeCreditoController {
     }
 
     @GetMapping("/{idCiclista}")
-    public ResponseEntity<CartaoDeCredito> obterCartaoDeCreditoPorIdCiclista(@PathVariable(value = "idCiclista") Long idCiclista) {
-        CartaoDeCredito cartaoDeCredito = cartaoDeCreditoService.obterCartaoDeCreditoPorIdCiclista(idCiclista);
+    public ResponseEntity<CartaoResponse> obterCartaoDeCreditoPorIdCiclista(@PathVariable(value = "idCiclista") Long idCiclista) {
+        CartaoResponse cartaoDeCredito = cartaoDeCreditoService.obterCartaoDeCreditoPorIdCiclista(idCiclista);
         return new ResponseEntity<>(cartaoDeCredito, HttpStatus.OK);
     }
 
