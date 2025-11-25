@@ -4,9 +4,10 @@ import com.es2.microservicos.domain.CartaoDeCredito;
 import com.es2.microservicos.domain.Ciclista;
 import com.es2.microservicos.dtos.requests.AdicionarCartaoRequest;
 import com.es2.microservicos.dtos.responses.CartaoResponse;
-import com.es2.microservicos.gateways.ExternoServiceGateway;
+import com.es2.microservicos.external.gateways.ExternoServiceGateway;
 import com.es2.microservicos.mappers.CartaoDeCreditoMapper;
 import com.es2.microservicos.repositories.CartaoDeCreditoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -30,18 +31,19 @@ public class CartaoDeCreditoService {
         return cartaoMapper.toCartaoResponse(cartaoSalvo);
     }
 
-
-    // TODO: Implementar lógica de negócio para gerenciar cartões de crédito
-    public CartaoDeCredito obterCartaoDeCreditoPorIdCiclista(Long idCiclista) {
-        return cartaoDeCreditoRepository.findByCiclistaId(idCiclista);
+    public CartaoDeCredito obterEntidadeCartaoDeCreditoPorIdCiclista(Long idCiclista) {
+        return cartaoDeCreditoRepository.findByCiclistaId(idCiclista).orElseThrow(() -> new EntityNotFoundException("Cartão de crédito não encontrado para ciclista com ID: " + idCiclista));
     }
 
+    // TODO: Implementar lógica de negócio para gerenciar cartões de crédito
+    public CartaoResponse obterCartaoDeCreditoPorIdCiclista(Long idCiclista) {
+        CartaoDeCredito cartao = obterEntidadeCartaoDeCreditoPorIdCiclista(idCiclista);
+        return cartaoMapper.toCartaoResponse(cartao);
+    }
 
     public void atualizarCartaoDeCreditoPorIdCiclista(Long idCiclista, AdicionarCartaoRequest cartaoRequest) {
-        CartaoDeCredito cartaoExistente = cartaoDeCreditoRepository.findByCiclistaId(idCiclista);
-        if (cartaoExistente == null) {
-            throw new IllegalArgumentException("Cartão de crédito não encontrado para o ciclista com ID: " + idCiclista);
-        }
+        CartaoDeCredito cartaoExistente = obterEntidadeCartaoDeCreditoPorIdCiclista(idCiclista);
+
         ResponseEntity validacaoCartaoResponse = externoServiceGateway.validacaoCartaoDeCredito(cartaoRequest);
         if (validacaoCartaoResponse.getStatusCode() != HttpStatus.OK) {
             throw new IllegalArgumentException("Cartão de crédito inválido!");
