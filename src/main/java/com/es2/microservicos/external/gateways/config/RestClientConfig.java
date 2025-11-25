@@ -1,4 +1,4 @@
-package com.es2.microservicos.config;
+package com.es2.microservicos.external.gateways.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
