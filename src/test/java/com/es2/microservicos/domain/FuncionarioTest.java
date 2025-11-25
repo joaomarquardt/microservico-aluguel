@@ -27,7 +27,7 @@ class FuncionarioTest {
                 "senha123",
                 "12345678901",
                 30,
-                "Gerente"
+                Funcao.REPARADOR
         );
 
         assertEquals(1L, funcionario.getId());
@@ -38,7 +38,7 @@ class FuncionarioTest {
         assertEquals("senha123", funcionario.getConfirmacaoSenha());
         assertEquals("12345678901", funcionario.getCpf());
         assertEquals(30, funcionario.getIdade());
-        assertEquals("Gerente", funcionario.getFuncao());
+        assertEquals(Funcao.REPARADOR.toString(), funcionario.getFuncao().toString());
     }
 
     @Test
@@ -54,7 +54,7 @@ class FuncionarioTest {
         funcionario.setConfirmacaoSenha("senha123");
         funcionario.setCpf("12345678901");
         funcionario.setIdade(30);
-        funcionario.setFuncao("Gerente");
+        funcionario.setFuncao(Funcao.REPARADOR);
 
         assertEquals(1L, funcionario.getId());
         assertEquals("MAT123", funcionario.getMatricula());
@@ -64,6 +64,6 @@ class FuncionarioTest {
         assertEquals("senha123", funcionario.getConfirmacaoSenha());
         assertEquals("12345678901", funcionario.getCpf());
         assertEquals(30, funcionario.getIdade());
-        assertEquals("Gerente", funcionario.getFuncao());
+        assertEquals(Funcao.REPARADOR.toString(), funcionario.getFuncao().toString());
     }
 }

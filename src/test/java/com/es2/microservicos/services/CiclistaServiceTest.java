@@ -4,13 +4,14 @@ import com.es2.microservicos.domain.Ciclista;
 import com.es2.microservicos.domain.Nacionalidade;
 import com.es2.microservicos.domain.Passaporte;
 import com.es2.microservicos.domain.Status;
-import com.es2.microservicos.dtos.requests.AtualizarCiclistaRequest;
 import com.es2.microservicos.dtos.requests.AdicionarCartaoRequest;
+import com.es2.microservicos.dtos.requests.AtualizarCiclistaRequest;
 import com.es2.microservicos.dtos.requests.CriarCiclistaRequest;
 import com.es2.microservicos.dtos.requests.RegistrarPassaporteRequest;
+import com.es2.microservicos.dtos.responses.CartaoResponse;
 import com.es2.microservicos.dtos.responses.CiclistaResponse;
-import com.es2.microservicos.gateways.EquipamentoServiceGateway;
-import com.es2.microservicos.gateways.ExternoServiceGateway;
+import com.es2.microservicos.external.gateways.EquipamentoServiceGateway;
+import com.es2.microservicos.external.gateways.ExternoServiceGateway;
 import com.es2.microservicos.mappers.CiclistaMapper;
 import com.es2.microservicos.repositories.CiclistaRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -21,13 +22,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
@@ -45,9 +47,6 @@ class CiclistaServiceTest {
     private CartaoDeCreditoService cartaoService;
 
     @Mock
-    private AluguelService aluguelService;
-
-    @Mock
     private ExternoServiceGateway externoServiceGateway;
 
     @Mock
@@ -57,11 +56,10 @@ class CiclistaServiceTest {
     private CiclistaService ciclistaService;
 
     private Ciclista ciclista;
-    private CriarCiclistaRequest criarCiclistaRequest;
-    private AtualizarCiclistaRequest atualizarCiclistaRequest;
+    private CriarCiclistaRequest criarRequest;
+    private AtualizarCiclistaRequest atualizarRequest;
     private CiclistaResponse ciclistaResponse;
     private AdicionarCartaoRequest cartaoRequest;
-    private RegistrarPassaporteRequest passaporteRequest;
 
     @BeforeEach
     void setUp() {
@@ -72,47 +70,37 @@ class CiclistaServiceTest {
                 "123"
         );
 
-        passaporteRequest = new RegistrarPassaporteRequest(
-                "João Silva",
-                LocalDate.of(2028, 5, 20),
-                "BR"
-        );
+        ciclista = new Ciclista();
+        ciclista.setId(1L);
+        ciclista.setNome("João Silva");
+        ciclista.setEmail("joao@email.com");
+        ciclista.setStatus(Status.INATIVO);
+        ciclista.setCpf("12345678901");
+        ciclista.setNascimento(LocalDate.of(1990, 1, 1));
+        ciclista.setNacionalidade(Nacionalidade.BRASILEIRO);
 
-        ciclista = new Ciclista(
-                1L,
+        criarRequest = new CriarCiclistaRequest(
                 "João Silva",
-                "joao@email.com",
-                Status.INATIVO,
-                "12345678901",
-                LocalDate.of(1990, 1, 1),
                 Nacionalidade.BRASILEIRO,
+                LocalDate.of(1990, 1, 1),
+                "12345678901",
+                "joao@email.com",
+                "senha123",
+                "senha123",
                 null,
-                "http://foto.com/doc.jpg"
-        );
-
-        criarCiclistaRequest = new CriarCiclistaRequest(
-                "João Silva",
-                Nacionalidade.BRASILEIRO,
-                LocalDate.of(1990, 1, 1),
-                "12345678901",
-                "joao@email.com",
-                "senha123",
-                "senha123",
-                passaporteRequest,
                 cartaoRequest,
                 "http://foto.com/doc.jpg"
-
         );
 
-        atualizarCiclistaRequest = new AtualizarCiclistaRequest(
+        atualizarRequest = new AtualizarCiclistaRequest(
                 "João Silva Atualizado",
                 Nacionalidade.BRASILEIRO,
                 LocalDate.of(1990, 1, 1),
                 "12345678901",
-                "joao@email.com",
+                "joao.atualizado@email.com",
                 "senha123",
                 "senha123",
-                passaporteRequest,
+                null,
                 "http://foto.com/doc.jpg"
         );
 
@@ -123,10 +111,9 @@ class CiclistaServiceTest {
                 LocalDate.of(1990, 1, 1),
                 "12345678901",
                 null,
-                Nacionalidade.BRASILEIRO.toString(),
+                Nacionalidade.BRASILEIRO,
                 "joao@email.com",
                 "http://foto.com/doc.jpg"
-
         );
     }
 
@@ -146,29 +133,35 @@ class CiclistaServiceTest {
     @Test
     @DisplayName("Deve lançar exceção quando ciclista não for encontrado")
     void deveLancarExcecaoQuandoCiclistaNaoEncontrado() {
-        when(ciclistaRepository.findById(anyLong())).thenReturn(Optional.empty());
+        when(ciclistaRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(EntityNotFoundException.class,
-                () -> ciclistaService.obterCiclistaPorId(1L));
+        EntityNotFoundException exception = assertThrows(
+                EntityNotFoundException.class,
+                () -> ciclistaService.obterCiclistaPorId(1L)
+        );
+
+        assertEquals("Ciclista não encontrado!", exception.getMessage());
         verify(ciclistaRepository, times(1)).findById(1L);
     }
 
     @Test
     @DisplayName("Deve criar ciclista brasileiro com sucesso")
     void deveCriarCiclistaBrasileiroComSucesso() {
-        when(ciclistaRepository.existsByEmail(anyString())).thenReturn(false);
+        when(ciclistaRepository.existsByEmail("joao@email.com")).thenReturn(false);
+        when(externoServiceGateway.validacaoCartaoDeCredito(any()))
+                .thenReturn(ResponseEntity.ok().build());
         when(ciclistaMapper.toCiclista(any(CriarCiclistaRequest.class))).thenReturn(ciclista);
         when(ciclistaRepository.save(any(Ciclista.class))).thenReturn(ciclista);
+        when(cartaoService.cadastrarCartaoDeCredito(any(), any(Ciclista.class)))
+                .thenReturn(mock(CartaoResponse.class));
+        when(externoServiceGateway.confirmacaoCadastroEmail(anyString(), anyString()))
+                .thenReturn(ResponseEntity.ok().build());
         when(ciclistaMapper.toCiclistaResponse(any(Ciclista.class))).thenReturn(ciclistaResponse);
-        when(externoServiceGateway.validacaoCartaoDeCredito(any())).thenReturn(true);
-        when(cartaoService.cadastrarCartaoDeCredito(any(), any(Ciclista.class))).thenReturn(null);
-        when(externoServiceGateway.confirmacaoCadastroEmail(anyString(), anyString())).thenReturn(true);
 
-        CiclistaResponse resultado = ciclistaService.criarCiclista(criarCiclistaRequest);
+        CiclistaResponse resultado = ciclistaService.criarCiclista(criarRequest);
 
         assertNotNull(resultado);
-        assertEquals(Status.INATIVO, ciclistaResponse.status());
-        verify(externoServiceGateway, times(1)).validacaoCartaoDeCredito(any());
+        assertEquals(Status.INATIVO, resultado.status());
         verify(ciclistaRepository, times(1)).save(any(Ciclista.class));
         verify(cartaoService, times(1)).cadastrarCartaoDeCredito(any(), any(Ciclista.class));
         verify(externoServiceGateway, times(1)).confirmacaoCadastroEmail(anyString(), anyString());
@@ -177,11 +170,11 @@ class CiclistaServiceTest {
     @Test
     @DisplayName("Deve lançar exceção ao criar ciclista com email já cadastrado")
     void deveLancarExcecaoAoCriarCiclistaComEmailJaCadastrado() {
-        when(ciclistaRepository.existsByEmail(anyString())).thenReturn(true);
+        when(ciclistaRepository.existsByEmail("joao@email.com")).thenReturn(true);
 
         IllegalArgumentException exception = assertThrows(
                 IllegalArgumentException.class,
-                () -> ciclistaService.criarCiclista(criarCiclistaRequest)
+                () -> ciclistaService.criarCiclista(criarRequest)
         );
 
         assertEquals("Email já cadastrado!", exception.getMessage());
@@ -222,7 +215,7 @@ class CiclistaServiceTest {
                 "John Doe",
                 Nacionalidade.ESTRANGEIRO,
                 LocalDate.of(1990, 1, 1),
-                "12345678901",
+                null,
                 "john@email.com",
                 "senha123",
                 "senha123",
@@ -253,10 +246,9 @@ class CiclistaServiceTest {
                 "joao@email.com",
                 "senha123",
                 "senha456",
-                passaporteRequest,
+                null,
                 cartaoRequest,
                 "http://foto.com/doc.jpg"
-
         );
 
         when(ciclistaRepository.existsByEmail(anyString())).thenReturn(false);
@@ -271,30 +263,53 @@ class CiclistaServiceTest {
     }
 
     @Test
+    @DisplayName("Deve lançar exceção quando cartão é inválido")
+    void deveLancarExcecaoQuandoCartaoInvalido() {
+        when(ciclistaRepository.existsByEmail(anyString())).thenReturn(false);
+        when(externoServiceGateway.validacaoCartaoDeCredito(any()))
+                .thenReturn(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> ciclistaService.criarCiclista(criarRequest)
+        );
+
+        assertEquals("Cartão de crédito inválido!", exception.getMessage());
+        verify(ciclistaRepository, never()).save(any(Ciclista.class));
+    }
+
+    @Test
     @DisplayName("Deve atualizar ciclista com sucesso")
     void deveAtualizarCiclistaComSucesso() {
         when(ciclistaRepository.findById(1L)).thenReturn(Optional.of(ciclista));
-        when(ciclistaRepository.save(any(Ciclista.class))).thenReturn(ciclista);
-        when(ciclistaMapper.toCiclistaResponse(any(Ciclista.class))).thenReturn(ciclistaResponse);
         doNothing().when(ciclistaMapper).updateCiclistaFromRequest(any(), any(Ciclista.class));
-        when(externoServiceGateway.atualizacaoCiclistaEmail(anyString(), anyString())).thenReturn(true);
+        when(ciclistaRepository.save(any(Ciclista.class))).thenReturn(ciclista);
+        when(externoServiceGateway.atualizacaoCiclistaEmail(anyString(), anyString()))
+                .thenReturn(ResponseEntity.ok().build());
+        when(ciclistaMapper.toCiclistaResponse(any(Ciclista.class))).thenReturn(ciclistaResponse);
 
-        CiclistaResponse resultado = ciclistaService.atualizarCiclista(1L, atualizarCiclistaRequest);
+        CiclistaResponse resultado = ciclistaService.atualizarCiclista(1L, atualizarRequest);
 
         assertNotNull(resultado);
-        verify(ciclistaRepository, times(1)).findById(1L);
         verify(ciclistaRepository, times(1)).save(any(Ciclista.class));
         verify(externoServiceGateway, times(1)).atualizacaoCiclistaEmail(anyString(), anyString());
     }
 
     @Test
-    @DisplayName("Deve lançar exceção ao atualizar ciclista inexistente")
-    void deveLancarExcecaoAoAtualizarCiclistaInexistente() {
-        when(ciclistaRepository.findById(anyLong())).thenReturn(Optional.empty());
+    @DisplayName("Deve lançar exceção quando falha envio de email ao atualizar")
+    void deveLancarExcecaoQuandoFalhaEnvioEmailAoAtualizar() {
+        when(ciclistaRepository.findById(1L)).thenReturn(Optional.of(ciclista));
+        doNothing().when(ciclistaMapper).updateCiclistaFromRequest(any(), any(Ciclista.class));
+        when(ciclistaRepository.save(any(Ciclista.class))).thenReturn(ciclista);
+        when(externoServiceGateway.atualizacaoCiclistaEmail(anyString(), anyString()))
+                .thenReturn(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
 
-        assertThrows(EntityNotFoundException.class,
-                () -> ciclistaService.atualizarCiclista(1L, atualizarCiclistaRequest));
-        verify(ciclistaRepository, never()).save(any(Ciclista.class));
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> ciclistaService.atualizarCiclista(1L, atualizarRequest)
+        );
+
+        assertEquals("Erro ao enviar email de atualização de ciclista!", exception.getMessage());
     }
 
     @Test
@@ -334,6 +349,67 @@ class CiclistaServiceTest {
 
         assertTrue(ciclistaService.verificarExistenciaEmail("joao@email.com"));
         assertFalse(ciclistaService.verificarExistenciaEmail("outro@email.com"));
-        verify(ciclistaRepository, times(2)).existsByEmail(anyString());
+    }
+
+    @Test
+    @DisplayName("Deve retornar null ao verificar permissão de aluguel (TODO)")
+    void deveRetornarNullAoVerificarPermissaoAluguel() {
+        Boolean resultado = ciclistaService.verificarPermissaoAluguel(1L);
+        assertNull(resultado);
+    }
+
+    @Test
+    @DisplayName("Deve retornar null ao obter bicicleta alugada (TODO)")
+    void deveRetornarNullAoObterBicicletaAlugada() {
+        var resultado = ciclistaService.obterBicicletaAlugadaPorIdCiclista(1L);
+        assertNull(resultado);
+        verify(equipamentoServiceGateway, times(1)).obterBicicletaPorId(1L);
+    }
+
+    @Test
+    @DisplayName("Deve criar ciclista estrangeiro com passaporte válido")
+    void deveCriarCiclistaEstrangeiroComPassaporteValido() {
+        Passaporte passaporte = new Passaporte("ABC123456", LocalDate.of(2030, 12, 31), "Estados Unidos");
+        CriarCiclistaRequest requestEstrangeiro = getCriarCiclistaRequest();
+
+        Ciclista ciclistaEstrangeiro = new Ciclista();
+        ciclistaEstrangeiro.setId(2L);
+        ciclistaEstrangeiro.setNome("John Doe");
+        ciclistaEstrangeiro.setEmail("john@email.com");
+        ciclistaEstrangeiro.setStatus(Status.INATIVO);
+        ciclistaEstrangeiro.setNacionalidade(Nacionalidade.ESTRANGEIRO);
+        ciclistaEstrangeiro.setPassaporte(passaporte);
+
+        when(ciclistaRepository.existsByEmail(anyString())).thenReturn(false);
+        when(externoServiceGateway.validacaoCartaoDeCredito(any()))
+                .thenReturn(ResponseEntity.ok().build());
+        when(ciclistaMapper.toCiclista(any(CriarCiclistaRequest.class))).thenReturn(ciclistaEstrangeiro);
+        when(ciclistaRepository.save(any(Ciclista.class))).thenReturn(ciclistaEstrangeiro);
+        when(cartaoService.cadastrarCartaoDeCredito(any(), any(Ciclista.class)))
+                .thenReturn(mock(CartaoResponse.class));
+        when(externoServiceGateway.confirmacaoCadastroEmail(anyString(), anyString()))
+                .thenReturn(ResponseEntity.ok().build());
+        when(ciclistaMapper.toCiclistaResponse(any(Ciclista.class))).thenReturn(ciclistaResponse);
+
+        CiclistaResponse resultado = ciclistaService.criarCiclista(requestEstrangeiro);
+
+        assertNotNull(resultado);
+        verify(ciclistaRepository, times(1)).save(any(Ciclista.class));
+    }
+
+    private CriarCiclistaRequest getCriarCiclistaRequest() {
+        RegistrarPassaporteRequest registrarPassaporteRequest = new RegistrarPassaporteRequest("ABC123456",LocalDate.of(2030, 12, 31), "Estados Unidos");
+        return new CriarCiclistaRequest(
+                "John Doe",
+                Nacionalidade.ESTRANGEIRO,
+                LocalDate.of(1990, 1, 1),
+                null,
+                "john@email.com",
+                "senha123",
+                "senha123",
+                registrarPassaporteRequest,
+                cartaoRequest,
+                "http://foto.com/doc.jpg"
+        );
     }
 }

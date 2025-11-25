@@ -1,5 +1,6 @@
 package com.es2.microservicos.domain;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -10,88 +11,145 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Testes para Aluguel")
 class AluguelTest {
 
+    private Ciclista ciclista;
+    private Aluguel aluguel;
+
+    @BeforeEach
+    void setUp() {
+        ciclista = new Ciclista();
+        ciclista.setId(1L);
+        ciclista.setNome("João Silva");
+        ciclista.setEmail("joao@email.com");
+
+        aluguel = new Aluguel();
+    }
+
+    @Test
+    @DisplayName("Deve criar aluguel com construtor completo")
+    void deveCriarAluguelComConstrutorCompleto() {
+        LocalDateTime horaInicio = LocalDateTime.now();
+        LocalDateTime horaFim = LocalDateTime.now().plusHours(2);
+
+        Aluguel aluguelCompleto = new Aluguel(
+                50L,
+                ciclista,
+                horaInicio,
+                horaFim,
+                10.0,
+                100L,
+                200L
+        );
+
+        assertNotNull(aluguelCompleto);
+        assertEquals(50L, aluguelCompleto.getBicicletaId());
+        assertEquals(ciclista, aluguelCompleto.getCiclista());
+        assertEquals(horaInicio, aluguelCompleto.getHoraInicio());
+        assertEquals(horaFim, aluguelCompleto.getHoraFim());
+        assertEquals(10.0, aluguelCompleto.getCobranca());
+        assertEquals(100L, aluguelCompleto.getTrancaInicio());
+        assertEquals(200L, aluguelCompleto.getTrancaFim());
+    }
+
     @Test
     @DisplayName("Deve criar aluguel com construtor vazio")
     void deveCriarAluguelComConstrutorVazio() {
-        Aluguel aluguel = new Aluguel();
         assertNotNull(aluguel);
-    }
-
-    @Test
-    @DisplayName("Deve criar aluguel com construtor completo com ID")
-    void deveCriarAluguelComConstrutorCompletoComId() {
-        Ciclista ciclista = new Ciclista();
-        ciclista.setId(1L);
-        LocalDateTime agora = LocalDateTime.now();
-
-        Aluguel aluguel = new Aluguel(
-                1L,
-                50L,
-                ciclista,
-                agora,
-                null,
-                100,
-                100L,
-                0L
-        );
-
-        assertEquals(1L, aluguel.getId());
-        assertEquals(50L, aluguel.getBicicletaId());
-        assertEquals(ciclista, aluguel.getCiclista());
-        assertEquals(agora, aluguel.getHoraInicio());
-        assertNull(aluguel.getHoraFim());
-        assertEquals(100, aluguel.getCobranca());
-        assertEquals(100L, aluguel.getTrancaInicio());
-        assertEquals(0L, aluguel.getTrancaFim());
-    }
-
-    @Test
-    @DisplayName("Deve criar aluguel com construtor sem ID")
-    void deveCriarAluguelComConstrutorSemId() {
-        Ciclista ciclista = new Ciclista();
-        ciclista.setId(1L);
-        LocalDateTime agora = LocalDateTime.now();
-
-        Aluguel aluguel = new Aluguel(
-                50L,
-                ciclista,
-                agora,
-                null,
-                100,
-                100L,
-                0L
-        );
-
         assertNull(aluguel.getId());
-        assertEquals(50L, aluguel.getBicicletaId());
-        assertEquals(ciclista, aluguel.getCiclista());
+        assertNull(aluguel.getBicicletaId());
+        assertNull(aluguel.getCiclista());
     }
 
     @Test
-    @DisplayName("Deve definir e obter todos os campos")
-    void deveDefinirEObterTodosCampos() {
-        Aluguel aluguel = new Aluguel();
-        Ciclista ciclista = new Ciclista();
-        ciclista.setId(1L);
-        LocalDateTime agora = LocalDateTime.now();
-        LocalDateTime fim = agora.plusHours(2);
+    @DisplayName("Deve retornar valor inicial de aluguel")
+    void deveRetornarValorInicialDeAluguel() {
+        double valorInicial = Aluguel.valorInicialAluguel();
+        assertEquals(10.0, valorInicial);
+    }
 
-        aluguel.setId(1L);
+    @Test
+    @DisplayName("Deve definir e obter ID")
+    void deveDefinirEObterID() {
+        aluguel.setId(10L);
+        assertEquals(10L, aluguel.getId());
+    }
+
+    @Test
+    @DisplayName("Deve definir e obter bicicleta ID")
+    void deveDefinirEObterBicicletaId() {
+        aluguel.setBicicletaId(50L);
+        assertEquals(50L, aluguel.getBicicletaId());
+    }
+
+    @Test
+    @DisplayName("Deve definir e obter ciclista")
+    void deveDefinirEObterCiclista() {
+        aluguel.setCiclista(ciclista);
+        assertEquals(ciclista, aluguel.getCiclista());
+        assertEquals("João Silva", aluguel.getCiclista().getNome());
+    }
+
+    @Test
+    @DisplayName("Deve definir e obter hora de início")
+    void deveDefinirEObterHoraInicio() {
+        LocalDateTime horaInicio = LocalDateTime.now();
+        aluguel.setHoraInicio(horaInicio);
+        assertEquals(horaInicio, aluguel.getHoraInicio());
+    }
+
+    @Test
+    @DisplayName("Deve definir e obter hora de fim")
+    void deveDefinirEObterHoraFim() {
+        LocalDateTime horaFim = LocalDateTime.now();
+        aluguel.setHoraFim(horaFim);
+        assertEquals(horaFim, aluguel.getHoraFim());
+    }
+
+    @Test
+    @DisplayName("Deve definir e obter cobrança")
+    void deveDefinirEObterCobranca() {
+        aluguel.setCobranca(25.50);
+        assertEquals(25.50, aluguel.getCobranca());
+    }
+
+    @Test
+    @DisplayName("Deve definir e obter tranca início")
+    void deveDefinirEObterTrancaInicio() {
+        aluguel.setTrancaInicio(100L);
+        assertEquals(100L, aluguel.getTrancaInicio());
+    }
+
+    @Test
+    @DisplayName("Deve definir e obter tranca fim")
+    void deveDefinirEObterTrancaFim() {
+        aluguel.setTrancaFim(200L);
+        assertEquals(200L, aluguel.getTrancaFim());
+    }
+
+    @Test
+    @DisplayName("Deve permitir valores nulos para tranca fim")
+    void devePermitirValoresNulosParaTrancaFim() {
+        aluguel.setTrancaFim(null);
+        assertNull(aluguel.getTrancaFim());
+    }
+
+    @Test
+    @DisplayName("Deve permitir valores nulos para hora fim")
+    void devePermitirValoresNulosParaHoraFim() {
+        aluguel.setHoraFim(null);
+        assertNull(aluguel.getHoraFim());
+    }
+
+    @Test
+    @DisplayName("Deve criar aluguel em andamento sem hora fim")
+    void deveCriarAluguelEmAndamentoSemHoraFim() {
         aluguel.setBicicletaId(50L);
         aluguel.setCiclista(ciclista);
-        aluguel.setHoraInicio(agora);
-        aluguel.setHoraFim(fim);
-        aluguel.setCobranca(100);
+        aluguel.setHoraInicio(LocalDateTime.now());
         aluguel.setTrancaInicio(100L);
-        aluguel.setTrancaFim(200L);
+        aluguel.setCobranca(10.0);
 
-        assertEquals(1L, aluguel.getId());
-        assertEquals(50L, aluguel.getBicicletaId());
-        assertEquals(ciclista, aluguel.getCiclista());
-        assertEquals(agora, aluguel.getHoraInicio());
-        assertEquals(fim, aluguel.getHoraFim());
-        assertEquals(100, aluguel.getCobranca());
-        assertEquals(100L, aluguel.getTrancaInicio());
-        assertEquals(200L, aluguel.getTrancaFim());
+        assertNotNull(aluguel.getHoraInicio());
+        assertNull(aluguel.getHoraFim());
+        assertNull(aluguel.getTrancaFim());
     }
 }
