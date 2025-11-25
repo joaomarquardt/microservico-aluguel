@@ -5,6 +5,7 @@ import com.es2.microservicos.dtos.requests.AtualizarCiclistaRequest;
 import com.es2.microservicos.dtos.requests.CriarCiclistaRequest;
 import com.es2.microservicos.dtos.responses.BicicletaResponse;
 import com.es2.microservicos.dtos.responses.CiclistaResponse;
+import com.es2.microservicos.services.AluguelService;
 import com.es2.microservicos.services.CiclistaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/ciclista")
 public class CiclistaController {
     private final CiclistaService ciclistaService;
+    private final AluguelService aluguelService;
 
-    public CiclistaController(CiclistaService ciclistaService) {
+    public CiclistaController(CiclistaService ciclistaService, AluguelService aluguelService) {
         this.ciclistaService = ciclistaService;
+        this.aluguelService = aluguelService;
     }
 
     @GetMapping("/{id}")
@@ -45,7 +48,7 @@ public class CiclistaController {
 
     @GetMapping("/{id}/permiteAluguel")
     public ResponseEntity<Boolean> verificarPermissaoAluguel(@PathVariable(value = "id") Long id) {
-        Boolean podeAlugar = ciclistaService.verificarPermissaoAluguel(id);
+        Boolean podeAlugar = aluguelService.verificarPermissaoAluguel(id);
         return new ResponseEntity<>(podeAlugar, HttpStatus.OK);
     }
 

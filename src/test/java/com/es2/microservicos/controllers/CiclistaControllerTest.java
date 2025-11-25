@@ -9,6 +9,7 @@ import com.es2.microservicos.dtos.requests.CriarCiclistaRequest;
 import com.es2.microservicos.dtos.responses.BicicletaResponse;
 import com.es2.microservicos.dtos.responses.CiclistaResponse;
 import com.es2.microservicos.external.domain.BicicletaStatus;
+import com.es2.microservicos.services.AluguelService;
 import com.es2.microservicos.services.CiclistaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -44,6 +45,9 @@ class CiclistaControllerTest {
 
     @Mock
     private CiclistaService ciclistaService;
+
+    @Mock
+    private AluguelService aluguelService;
 
     @InjectMocks
     private CiclistaController ciclistaController;
@@ -218,13 +222,13 @@ class CiclistaControllerTest {
     @Test
     @DisplayName("Deve verificar permissão de aluguel e retornar 200 OK")
     void deveVerificarPermissaoAluguelERetornar200() throws Exception {
-        when(ciclistaService.verificarPermissaoAluguel(1L)).thenReturn(true);
+        when(aluguelService.verificarPermissaoAluguel(1L)).thenReturn(true);
 
         mockMvc.perform(get("/ciclista/{id}/permiteAluguel", 1L))
                 .andExpect(status().isOk())
                 .andExpect(content().string("true"));
 
-        verify(ciclistaService, times(1)).verificarPermissaoAluguel(1L);
+        verify(aluguelService, times(1)).verificarPermissaoAluguel(1L);
     }
 
     @Test

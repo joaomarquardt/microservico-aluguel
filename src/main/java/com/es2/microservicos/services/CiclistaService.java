@@ -94,11 +94,6 @@ public class CiclistaService {
         return ciclistaMapper.toCiclistaResponse(ciclistaSalvo);
     }
 
-    // TODO: Implementar método verificarPermissaoAluguel
-    public Boolean verificarPermissaoAluguel(Long id) {
-        return null;
-    }
-
     // TODO: Terminar implementação de método obterBicicletaAlugada conectando com microserviço de Equipamento
     public BicicletaResponse obterBicicletaAlugadaPorIdCiclista(Long id) {
         // TODO: Implementar lógica para analisar se o ciclista possui uma bicicleta alugada

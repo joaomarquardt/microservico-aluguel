@@ -74,4 +74,8 @@ public class AluguelService {
         externoServiceGateway.dadosAluguelNovoEmail(detalhesAluguel);
         return aluguelMapper.toAluguelResponse(aluguelSalvo);
     }
+
+    public Boolean verificarPermissaoAluguel(Long id) {
+        return aluguelRepository.findByCiclistaIdAndTrancaFimIsNull(id).isEmpty();
+    }
 }

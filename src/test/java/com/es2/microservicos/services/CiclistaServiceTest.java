@@ -352,13 +352,6 @@ class CiclistaServiceTest {
     }
 
     @Test
-    @DisplayName("Deve retornar null ao verificar permissão de aluguel (TODO)")
-    void deveRetornarNullAoVerificarPermissaoAluguel() {
-        Boolean resultado = ciclistaService.verificarPermissaoAluguel(1L);
-        assertNull(resultado);
-    }
-
-    @Test
     @DisplayName("Deve retornar null ao obter bicicleta alugada (TODO)")
     void deveRetornarNullAoObterBicicletaAlugada() {
         var resultado = ciclistaService.obterBicicletaAlugadaPorIdCiclista(1L);
