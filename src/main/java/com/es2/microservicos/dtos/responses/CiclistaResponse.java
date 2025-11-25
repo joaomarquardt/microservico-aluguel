@@ -1,5 +1,6 @@
 package com.es2.microservicos.dtos.responses;
 
+import com.es2.microservicos.domain.Nacionalidade;
 import com.es2.microservicos.domain.Status;
 
 import java.time.LocalDate;
@@ -11,7 +12,7 @@ public record CiclistaResponse(
         LocalDate nascimento,
         String cpf,
         PassaporteResponse passaporte,
-        String nacionalidade,
+        Nacionalidade nacionalidade,
         String email,
         String urlFotoDocumento
 ) {

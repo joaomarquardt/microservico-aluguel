@@ -8,7 +8,7 @@ public record AluguelResponse(
         Long trancaInicio,
         LocalDateTime horaFim,
         Long trancaFim,
-        Integer cobranca,
+        double cobranca,
         Long ciclistaId
 ) {
 }

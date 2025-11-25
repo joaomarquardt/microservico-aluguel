@@ -1,5 +1,7 @@
 package com.es2.microservicos.dtos.responses;
 
+import com.es2.microservicos.domain.Funcao;
+
 public record FuncionarioResponse(
         String matricula,
         String nome,
@@ -8,6 +10,6 @@ public record FuncionarioResponse(
         String confirmacaoSenha,
         String cpf,
         Integer idade,
-        String funcao
+        Funcao funcao
 ) {
 }
