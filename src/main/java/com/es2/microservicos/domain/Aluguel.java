@@ -16,14 +16,14 @@ public class Aluguel {
     private Ciclista ciclista;
     private LocalDateTime horaInicio;
     private LocalDateTime horaFim;
-    private Integer cobranca;
+    private double cobranca;
     private Long trancaInicio;
-    private Long trancaFim = 0L;
+    private Long trancaFim;
 
     public Aluguel() {
     }
 
-    public Aluguel(Long id, Long bicicletaId, Ciclista ciclista, LocalDateTime horaInicio, LocalDateTime horaFim, Integer cobranca, Long trancaInicio, Long trancaFim) {
+    public Aluguel(Long id, Long bicicletaId, Ciclista ciclista, LocalDateTime horaInicio, LocalDateTime horaFim, double cobranca, Long trancaInicio, Long trancaFim) {
         this.id = id;
         this.bicicletaId = bicicletaId;
         this.ciclista = ciclista;
@@ -34,7 +34,7 @@ public class Aluguel {
         this.trancaFim = trancaFim;
     }
 
-    public Aluguel(Long bicicletaId, Ciclista ciclista, LocalDateTime horaInicio, LocalDateTime horaFim, Integer cobranca, Long trancaInicio, Long trancaFim) {
+    public Aluguel(Long bicicletaId, Ciclista ciclista, LocalDateTime horaInicio, LocalDateTime horaFim, double cobranca, Long trancaInicio, Long trancaFim) {
         this.bicicletaId = bicicletaId;
         this.ciclista = ciclista;
         this.horaInicio = horaInicio;
@@ -84,11 +84,11 @@ public class Aluguel {
         this.horaFim = horaFim;
     }
 
-    public Integer getCobranca() {
+    public double getCobranca() {
         return cobranca;
     }
 
-    public void setCobranca(Integer cobranca) {
+    public void setCobranca(double cobranca) {
         this.cobranca = cobranca;
     }
 
@@ -106,5 +106,9 @@ public class Aluguel {
 
     public void setTrancaFim(Long trancaFim) {
         this.trancaFim = trancaFim;
+    }
+
+    public static double valorInicialAluguel() {
+        return 10;
     }
 }

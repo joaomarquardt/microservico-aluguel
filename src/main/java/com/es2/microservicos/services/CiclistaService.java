@@ -7,8 +7,8 @@ import com.es2.microservicos.dtos.requests.AtualizarCiclistaRequest;
 import com.es2.microservicos.dtos.requests.CriarCiclistaRequest;
 import com.es2.microservicos.dtos.responses.BicicletaResponse;
 import com.es2.microservicos.dtos.responses.CiclistaResponse;
-import com.es2.microservicos.gateways.EquipamentoServiceGateway;
-import com.es2.microservicos.gateways.ExternoServiceGateway;
+import com.es2.microservicos.external.gateways.EquipamentoServiceGateway;
+import com.es2.microservicos.external.gateways.ExternoServiceGateway;
 import com.es2.microservicos.mappers.CiclistaMapper;
 import com.es2.microservicos.repositories.CiclistaRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -109,6 +109,4 @@ public class CiclistaService {
     public Boolean verificarExistenciaEmail(String email) {
         return ciclistaRepository.existsByEmail(email);
     }
-
-
 }
