@@ -64,7 +64,6 @@ public class CiclistaService {
 
     public CiclistaResponse atualizarCiclista(Long id, AtualizarCiclistaRequest ciclistaRequest) {
         Ciclista ciclista = obterCiclistaPorId(id);
-        // TODO: Separar lógicas abaixo em um método privado para reutilização
         if (ciclistaRequest.nacionalidade() == Nacionalidade.BRASILEIRO && ciclistaRequest.cpf() == null) {
             throw new IllegalArgumentException("Ciclistas brasileiros devem fornecer CPF!");
         }

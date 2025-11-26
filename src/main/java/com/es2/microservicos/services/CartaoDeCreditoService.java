@@ -34,8 +34,7 @@ public class CartaoDeCreditoService {
     public CartaoDeCredito obterEntidadeCartaoDeCreditoPorIdCiclista(Long idCiclista) {
         return cartaoDeCreditoRepository.findByCiclistaId(idCiclista).orElseThrow(() -> new EntityNotFoundException("Cartão de crédito não encontrado para ciclista com ID: " + idCiclista));
     }
-
-    // TODO: Implementar lógica de negócio para gerenciar cartões de crédito
+    
     public CartaoResponse obterCartaoDeCreditoPorIdCiclista(Long idCiclista) {
         CartaoDeCredito cartao = obterEntidadeCartaoDeCreditoPorIdCiclista(idCiclista);
         return cartaoMapper.toCartaoResponse(cartao);
