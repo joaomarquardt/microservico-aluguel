@@ -13,6 +13,7 @@ import com.es2.microservicos.external.gateways.EquipamentoServiceGateway;
 import com.es2.microservicos.external.gateways.ExternoServiceGateway;
 import com.es2.microservicos.mappers.AluguelMapper;
 import com.es2.microservicos.repositories.AluguelRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -77,5 +78,15 @@ public class AluguelService {
 
     public Boolean verificarPermissaoAluguel(Long id) {
         return aluguelRepository.findByCiclistaIdAndTrancaFimIsNull(id).isEmpty();
+    }
+
+    // TODO: Terminar implementação de método obterBicicletaAlugada conectando com microserviço de Equipamento
+    public BicicletaResponse obterBicicletaAlugadaPorIdCiclista(Long ciclistaId) {
+        Optional<Aluguel> aluguel = aluguelRepository.findByCiclistaIdAndTrancaFimIsNull(ciclistaId);
+        if (aluguel.isEmpty()) {
+            throw new EntityNotFoundException("Não existe bicicleta sendo utilizada pelo ciclista com ID: " + ciclistaId);
+        }
+        equipamentoServiceGateway.obterBicicletaPorId(aluguel.get().getBicicletaId());
+        return null;
     }
 }
