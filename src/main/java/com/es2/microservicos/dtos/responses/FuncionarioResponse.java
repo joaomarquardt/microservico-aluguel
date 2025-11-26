@@ -3,6 +3,7 @@ package com.es2.microservicos.dtos.responses;
 import com.es2.microservicos.domain.Funcao;
 
 public record FuncionarioResponse(
+        Long id,
         String matricula,
         String nome,
         String email,
