@@ -299,4 +299,12 @@ class AluguelServiceTest {
         assertEquals("O pagamento não foi concluído devido a erro no pagamento ou pagamento não autorizado", exception.getMessage());
         verify(aluguelRepository, never()).save(any(Aluguel.class));
     }
+
+    @Test
+    @DisplayName("Deve retornar null ao obter bicicleta alugada (TODO)")
+    void deveRetornarNullAoObterBicicletaAlugada() {
+        var resultado = aluguelService.obterBicicletaAlugadaPorIdCiclista(1L);
+        assertNull(resultado);
+        verify(equipamentoServiceGateway, times(1)).obterBicicletaPorId(1L);
+    }
 }

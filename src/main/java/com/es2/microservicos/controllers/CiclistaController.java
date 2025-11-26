@@ -55,7 +55,7 @@ public class CiclistaController {
     @GetMapping("/{id}/bicicletaAlugada")
     public ResponseEntity<BicicletaResponse> obterBicicletaAlugadaPorIdCiclista(@PathVariable(value = "id") Long id) {
         // TODO: Alterar tipo de variável após implementar integração com microserviço de Equipamento e criação de DTOs
-        BicicletaResponse bicicletaAlugada = ciclistaService.obterBicicletaAlugadaPorIdCiclista(id);
+        BicicletaResponse bicicletaAlugada = aluguelService.obterBicicletaAlugadaPorIdCiclista(id);
         return new ResponseEntity<>(bicicletaAlugada, HttpStatus.OK);
     }
 

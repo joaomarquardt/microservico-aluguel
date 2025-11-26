@@ -234,14 +234,14 @@ class CiclistaControllerTest {
     @Test
     @DisplayName("Deve obter bicicleta alugada do ciclista")
     void deveObterBicicletaAlugadaDoCiclista() throws Exception {
-        when(ciclistaService.obterBicicletaAlugadaPorIdCiclista(1L))
+        when(aluguelService.obterBicicletaAlugadaPorIdCiclista(1L))
                 .thenReturn(bicicletaResponse);
 
         mockMvc.perform(get("/ciclista/{id}/bicicletaAlugada", 1L))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(10));
 
-        verify(ciclistaService, times(1)).obterBicicletaAlugadaPorIdCiclista(1L);
+        verify(aluguelService, times(1)).obterBicicletaAlugadaPorIdCiclista(1L);
     }
 
     @Test

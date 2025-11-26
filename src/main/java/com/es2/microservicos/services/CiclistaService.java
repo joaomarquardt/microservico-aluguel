@@ -94,12 +94,6 @@ public class CiclistaService {
         return ciclistaMapper.toCiclistaResponse(ciclistaSalvo);
     }
 
-    // TODO: Terminar implementação de método obterBicicletaAlugada conectando com microserviço de Equipamento
-    public BicicletaResponse obterBicicletaAlugadaPorIdCiclista(Long id) {
-        // TODO: Implementar lógica para analisar se o ciclista possui uma bicicleta alugada
-        equipamentoServiceGateway.obterBicicletaPorId(id);
-        return null;
-    }
 
     public Boolean verificarExistenciaEmail(String email) {
         return ciclistaRepository.existsByEmail(email);

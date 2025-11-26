@@ -352,14 +352,6 @@ class CiclistaServiceTest {
     }
 
     @Test
-    @DisplayName("Deve retornar null ao obter bicicleta alugada (TODO)")
-    void deveRetornarNullAoObterBicicletaAlugada() {
-        var resultado = ciclistaService.obterBicicletaAlugadaPorIdCiclista(1L);
-        assertNull(resultado);
-        verify(equipamentoServiceGateway, times(1)).obterBicicletaPorId(1L);
-    }
-
-    @Test
     @DisplayName("Deve criar ciclista estrangeiro com passaporte válido")
     void deveCriarCiclistaEstrangeiroComPassaporteValido() {
         Passaporte passaporte = new Passaporte("ABC123456", LocalDate.of(2030, 12, 31), "Estados Unidos");
