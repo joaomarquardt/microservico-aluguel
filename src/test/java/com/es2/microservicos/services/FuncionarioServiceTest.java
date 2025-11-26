@@ -76,6 +76,7 @@ class FuncionarioServiceTest {
         );
 
         funcionarioResponse = new FuncionarioResponse(
+                1L,
                 "FUNC00001",
                 "Carlos Silva",
                 "carlos@empresa.com",
@@ -236,6 +237,7 @@ class FuncionarioServiceTest {
         funcionarioAtualizado.setFuncao(Funcao.ADMINISTRATIVO);
 
         FuncionarioResponse responseAtualizado = new FuncionarioResponse(
+                1L,
                 "FUNC00001",
                 "Carlos Silva Atualizado",
                 "carlos.atualizado@empresa.com",
@@ -344,7 +346,7 @@ class FuncionarioServiceTest {
         funcionarioAdmin.setFuncao(Funcao.ADMINISTRATIVO);
 
         FuncionarioResponse responseAdmin = new FuncionarioResponse(
-                "FUNC00002", "Maria Admin", "maria@empresa.com", "senha123", "senha123", "98765432100", 28, Funcao.ADMINISTRATIVO
+                1L, "FUNC00002", "Maria Admin", "maria@empresa.com", "senha123", "senha123", "98765432100", 28, Funcao.ADMINISTRATIVO
         );
 
         when(funcionarioMapper.toFuncionario(requestAdmin)).thenReturn(funcionarioAdmin);

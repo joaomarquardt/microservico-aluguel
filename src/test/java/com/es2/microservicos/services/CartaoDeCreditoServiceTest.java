@@ -75,6 +75,7 @@ class CartaoDeCreditoServiceTest {
         );
 
         cartaoResponse = new CartaoResponse(
+                1L,
                 "João Silva",
                 "1234567890123456",
                 LocalDate.of(2027, 12, 31),
@@ -268,7 +269,7 @@ class CartaoDeCreditoServiceTest {
         cartaoFuturo.setCiclista(ciclista);
 
         CartaoResponse responseFuturo = new CartaoResponse(
-                "Titular", "1111222233334444", LocalDate.of(2030, 12, 31), "999"
+                1L, "Titular", "1111222233334444", LocalDate.of(2030, 12, 31), "999"
         );
 
         when(cartaoRepository.findByCiclistaId(1L)).thenReturn(Optional.of(cartaoFuturo));

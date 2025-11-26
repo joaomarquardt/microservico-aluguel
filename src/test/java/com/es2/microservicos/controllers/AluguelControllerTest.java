@@ -65,6 +65,7 @@ class AluguelControllerTest {
 
         aluguelResponse = new AluguelResponse(
                 1L,
+                1L,
                 LocalDateTime.now(),
                 5L,
                 null,
@@ -109,7 +110,7 @@ class AluguelControllerTest {
     void deveProcessarRequisicaoComTrancaValida() throws Exception {
         GerarAluguelRequest requestValido = new GerarAluguelRequest(5L, 200L);
         AluguelResponse responseValido = new AluguelResponse(
-                2L, LocalDateTime.now(), 5L, null, null, 10.0, 200L
+                1L, 2L, LocalDateTime.now(), 5L, null, null, 10.0, 200L
         );
 
         when(aluguelService.gerarAluguel(any(GerarAluguelRequest.class)))

@@ -63,7 +63,7 @@ class ExternoServiceGatewayTest {
     @DisplayName("Deve retornar OK ao enviar dados de aluguel atual")
     void deveRetornarOkAoEnviarDadosAluguelAtual() {
         AluguelResponse aluguel = new AluguelResponse(
-                1L, LocalDateTime.now(), 1L, null, null, 10.0, 100L
+                1L, 1L, LocalDateTime.now(), 1L, null, null, 10.0, 100L
         );
 
         ResponseEntity response = gateway.dadosAluguelAtualEmail(aluguel);
@@ -76,7 +76,7 @@ class ExternoServiceGatewayTest {
     @DisplayName("Deve retornar OK ao enviar dados de novo aluguel")
     void deveRetornarOkAoEnviarDadosNovoAluguel() {
         AluguelResponse aluguel = new AluguelResponse(
-                2L, LocalDateTime.now(), 2L, null, null, 10.0, 200L
+                1L, 2L, LocalDateTime.now(), 2L, null, null, 10.0, 200L
         );
 
         ResponseEntity response = gateway.dadosAluguelNovoEmail(aluguel);
@@ -89,7 +89,7 @@ class ExternoServiceGatewayTest {
     @DisplayName("Deve retornar OK ao cobrar aluguel")
     void deveRetornarOkAoCobrarAluguel() {
         CartaoResponse cartao = new CartaoResponse(
-                "João Silva", "1234567890123456", LocalDate.of(2027, 12, 31), "123"
+                1L, "João Silva", "1234567890123456", LocalDate.of(2027, 12, 31), "123"
         );
 
         ResponseEntity response = gateway.cobrarAluguel(10.0, cartao);
@@ -127,7 +127,7 @@ class ExternoServiceGatewayTest {
     @DisplayName("Deve processar cobrança com diferentes valores")
     void deveProcessarCobrancaComDiferentesValores() {
         CartaoResponse cartao = new CartaoResponse(
-                "Titular", "1111222233334444", LocalDate.of(2029, 3, 15), "789"
+                1L, "Titular", "1111222233334444", LocalDate.of(2029, 3, 15), "789"
         );
 
         ResponseEntity response1 = gateway.cobrarAluguel(5.0, cartao);

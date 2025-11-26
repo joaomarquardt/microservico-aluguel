@@ -14,6 +14,7 @@ import com.es2.microservicos.external.gateways.EquipamentoServiceGateway;
 import com.es2.microservicos.external.gateways.ExternoServiceGateway;
 import com.es2.microservicos.mappers.AluguelMapper;
 import com.es2.microservicos.repositories.AluguelRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -89,6 +90,7 @@ class AluguelServiceTest {
         );
 
         cartaoResponse = new CartaoResponse(
+                1L,
                 "João Silva",
                 "1234567890123456",
                 LocalDate.of(2027, 12, 31),
@@ -104,6 +106,7 @@ class AluguelServiceTest {
         aluguel.setTrancaInicio(100L);
 
         aluguelResponse = new AluguelResponse(
+                1L,
                 1L,
                 LocalDateTime.now(),
                 1L,
@@ -301,10 +304,11 @@ class AluguelServiceTest {
     }
 
     @Test
-    @DisplayName("Deve retornar null ao obter bicicleta alugada (TODO)")
-    void deveRetornarNullAoObterBicicletaAlugada() {
-        var resultado = aluguelService.obterBicicletaAlugadaPorIdCiclista(1L);
-        assertNull(resultado);
-        verify(equipamentoServiceGateway, times(1)).obterBicicletaPorId(1L);
+    @DisplayName("Deve lançar exceção ao obter bicicleta alugada (TODO não implementado)")
+    void deveLancarExcecaoAoObterBicicletaAlugada() {
+        assertThrows(
+                EntityNotFoundException.class,
+                () -> aluguelService.obterBicicletaAlugadaPorIdCiclista(1L)
+        );
     }
 }
