@@ -55,4 +55,8 @@ public class ExternoServiceGateway {
         return ResponseEntity.ok().build();
     }
 
+    public ResponseEntity devolucaoBicicletaEmail(String nomeDestinatario, String emailDestinatario, AluguelResponse aluguelResponse, double taxaExtra) {
+        // TODO: Implementar chamada ao endpoint de notificação do microserviço Externo
+        return ResponseEntity.ok().build();
+    }
 }

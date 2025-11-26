@@ -9,4 +9,6 @@ public interface AluguelRepository extends JpaRepository<Aluguel, Long> {
     Aluguel findByCiclistaId(Long ciclistaId);
 
     Optional<Aluguel> findByCiclistaIdAndTrancaFimIsNull(Long ciclistaId);
+
+    Optional<Aluguel> findByBicicletaIdAndTrancaFimIsNull(Long bicicletaId);
 }
