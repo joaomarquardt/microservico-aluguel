@@ -33,17 +33,14 @@ class EquipamentoServiceGatewayTest {
     @DisplayName("Deve retornar OK ao verificar existência de tranca")
     void deveRetornarOkAoVerificarExistenciaDeTranca() {
         ResponseEntity<Boolean> response = gateway.existeTrancaPorId(123L);
-
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        // Body é null porque o gateway retorna .build() sem body
     }
 
     @Test
     @DisplayName("Deve retornar response sem body ao obter bicicleta por ID de tranca")
     void deveRetornarResponseSemBodyAoObterBicicletaPorIdTranca() {
         ResponseEntity<BicicletaResponse> response = gateway.obterBicicletaPorIdTranca(100L);
-
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertFalse(response.hasBody());
@@ -53,7 +50,6 @@ class EquipamentoServiceGatewayTest {
     @DisplayName("Deve retornar OK ao alterar status da bicicleta")
     void deveRetornarOkAoAlterarStatusBicicleta() {
         ResponseEntity response = gateway.alterarStatusBicicleta(50L, BicicletaStatus.EM_USO);
-
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
@@ -62,7 +58,6 @@ class EquipamentoServiceGatewayTest {
     @DisplayName("Deve retornar OK ao alterar status da tranca")
     void deveRetornarOkAoAlterarStatusTranca() {
         ResponseEntity response = gateway.alterarStatusTranca(200L, TrancaStatus.DESTRANCAR);
-
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
