@@ -76,9 +76,6 @@ public class DevolucaoService {
             ResponseEntity cobrancaResponse = externoServiceGateway.cobrarAluguel(valorExtra, cartao);
             if (cobrancaResponse.getStatusCode() == HttpStatus.OK) {
                 aluguel.setCobranca(aluguel.getCobranca() + valorExtra);
-            } else {
-                // TODO: Implementar registro de cobrança pendente
-                aluguel.setCobranca(aluguel.getCobranca() + valorExtra);
             }
         }
         Aluguel aluguelFinalizado = aluguelRepository.save(aluguel);
