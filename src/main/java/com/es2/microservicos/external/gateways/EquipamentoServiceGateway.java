@@ -39,9 +39,15 @@ public class EquipamentoServiceGateway {
         return bicicletaTrancaResponse.getBody();
     }
 
-    public ResponseEntity<Boolean> existeTrancaPorId(Long idTranca) {
-        // TODO: Implementar chamada ao microserviço Equipamento
-        return ResponseEntity.ok().build();
+    public boolean existeTrancaPorId(Long idTranca) {
+        if (idTranca == null) {
+            throw new IllegalArgumentException("ID da tranca não pode ser nulo.");
+        }
+        ResponseEntity tranca = restClient.get()
+                .uri("/tranca/{idTranca}", idTranca)
+                .retrieve()
+                .toEntity(Boolean.class);
+        return tranca.getStatusCode().is2xxSuccessful();
     }
 
      public BicicletaResponse alterarStatusBicicleta(Long idBicicleta, BicicletaStatus status) {
