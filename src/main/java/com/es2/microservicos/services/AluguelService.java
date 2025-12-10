@@ -67,13 +67,12 @@ public class AluguelService {
         return aluguelRepository.findByCiclistaIdAndTrancaFimIsNull(id).isEmpty();
     }
 
-    // TODO: Terminar implementação de método obterBicicletaAlugada conectando com microserviço de Equipamento
     public BicicletaResponse obterBicicletaAlugadaPorIdCiclista(Long ciclistaId) {
+        ciclistaService.obterCiclistaPorId(ciclistaId);
         Optional<Aluguel> aluguel = aluguelRepository.findByCiclistaIdAndTrancaFimIsNull(ciclistaId);
         if (aluguel.isEmpty()) {
-            throw new EntityNotFoundException("Não existe bicicleta sendo utilizada pelo ciclista com ID: " + ciclistaId);
+            return null;
         }
-        equipamentoServiceGateway.obterBicicletaPorId(aluguel.get().getBicicletaId());
-        return null;
+        return equipamentoServiceGateway.obterBicicletaPorId(aluguel.get().getBicicletaId());
     }
 }
