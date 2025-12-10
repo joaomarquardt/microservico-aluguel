@@ -5,15 +5,12 @@ import com.es2.microservicos.domain.Ciclista;
 import com.es2.microservicos.dtos.requests.DevolucaoRequest;
 import com.es2.microservicos.dtos.responses.AluguelResponse;
 import com.es2.microservicos.dtos.responses.BicicletaResponse;
-import com.es2.microservicos.dtos.responses.CartaoResponse;
 import com.es2.microservicos.external.domain.BicicletaStatus;
 import com.es2.microservicos.external.domain.TrancaStatus;
 import com.es2.microservicos.external.gateways.EquipamentoServiceGateway;
 import com.es2.microservicos.external.gateways.ExternoServiceGateway;
 import com.es2.microservicos.mappers.AluguelMapper;
 import com.es2.microservicos.repositories.AluguelRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,23 +27,17 @@ public class DevolucaoService {
     private final AluguelMapper aluguelMapper;
     private final EquipamentoServiceGateway equipamentoServiceGateway;
     private final ExternoServiceGateway externoServiceGateway;
-    private final CartaoDeCreditoService cartaoDeCreditoService;
 
-    public DevolucaoService(AluguelRepository aluguelRepository, AluguelMapper aluguelMapper, EquipamentoServiceGateway equipamentoServiceGateway, ExternoServiceGateway externoServiceGateway, CartaoDeCreditoService cartaoDeCreditoService) {
+    public DevolucaoService(AluguelRepository aluguelRepository, AluguelMapper aluguelMapper, EquipamentoServiceGateway equipamentoServiceGateway, ExternoServiceGateway externoServiceGateway) {
         this.aluguelRepository = aluguelRepository;
         this.aluguelMapper = aluguelMapper;
         this.equipamentoServiceGateway = equipamentoServiceGateway;
         this.externoServiceGateway = externoServiceGateway;
-        this.cartaoDeCreditoService = cartaoDeCreditoService;
     }
 
     @Transactional
     public AluguelResponse devolverBicicleta(DevolucaoRequest request) {
-        ResponseEntity<BicicletaResponse> bicicletaResponse = equipamentoServiceGateway.obterBicicletaPorId(request.idBicicleta());
-        if (!bicicletaResponse.hasBody() || bicicletaResponse.getBody() == null) {
-            throw new IllegalArgumentException("Não existe bicicleta na tranca com ID:" + request.idBicicleta());
-        }
-        BicicletaResponse bicicleta = bicicletaResponse.getBody();
+        BicicletaResponse bicicleta = equipamentoServiceGateway.obterBicicletaPorId(request.idBicicleta());
         if (bicicleta.status() != BicicletaStatus.EM_USO) {
             if (bicicleta.status() == BicicletaStatus.NOVA || bicicleta.status() == BicicletaStatus.EM_REPARO) {
                 equipamentoServiceGateway.alterarStatusBicicleta(request.idBicicleta(), BicicletaStatus.DISPONIVEL);
@@ -54,9 +45,9 @@ public class DevolucaoService {
             }
             throw new IllegalArgumentException("Bicicleta não está em uso!");
         }
-        ResponseEntity<Boolean> trancaExiste = equipamentoServiceGateway.existeTrancaPorId(request.idTranca());
-        if (trancaExiste.getBody() == null || !trancaExiste.getBody()) {
-            throw new IllegalArgumentException("Não existe tranca com ID: " + request.idTranca());
+        boolean trancaExiste = equipamentoServiceGateway.existeTrancaPorId(request.idTranca());
+        if (!trancaExiste) {
+            throw new IllegalArgumentException("Tranca com ID " + request.idTranca() + " não existe!");
         }
         Optional<Aluguel> aluguelOpt = aluguelRepository.findByBicicletaIdAndTrancaFimIsNull(request.idBicicleta());
         if (aluguelOpt.isEmpty()) {
@@ -72,11 +63,8 @@ public class DevolucaoService {
         double valorExtra = calcularValorExtra(minutosUsados);
 
         if (minutosUsados > MINUTOS_INICIAIS) {
-            CartaoResponse cartao = cartaoDeCreditoService.obterCartaoDeCreditoPorIdCiclista(ciclista.getId());
-            ResponseEntity cobrancaResponse = externoServiceGateway.cobrarAluguel(valorExtra, cartao);
-            if (cobrancaResponse.getStatusCode() == HttpStatus.OK) {
-                aluguel.setCobranca(aluguel.getCobranca() + valorExtra);
-            }
+            externoServiceGateway.cobrarAluguel(valorExtra, ciclista.getId());
+            aluguel.setCobranca(aluguel.getCobranca() + valorExtra);
         }
         Aluguel aluguelFinalizado = aluguelRepository.save(aluguel);
         equipamentoServiceGateway.alterarStatusBicicleta(request.idBicicleta(), BicicletaStatus.DISPONIVEL);

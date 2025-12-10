@@ -42,17 +42,10 @@ public class CartaoDeCreditoService {
 
     public void atualizarCartaoDeCreditoPorIdCiclista(Long idCiclista, AdicionarCartaoRequest cartaoRequest) {
         CartaoDeCredito cartaoExistente = obterEntidadeCartaoDeCreditoPorIdCiclista(idCiclista);
-
-        ResponseEntity validacaoCartaoResponse = externoServiceGateway.validacaoCartaoDeCredito(cartaoRequest);
-        if (validacaoCartaoResponse.getStatusCode() != HttpStatus.OK) {
-            throw new IllegalArgumentException("Cartão de crédito inválido!");
-        }
+        externoServiceGateway.validacaoCartaoDeCredito(cartaoRequest);
         cartaoMapper.updateCartaoDeCreditoFromRequest(cartaoRequest, cartaoExistente);
         cartaoDeCreditoRepository.save(cartaoExistente);
         Ciclista ciclista = cartaoExistente.getCiclista();
-        ResponseEntity atualizacaoCartaoEmailResponse = externoServiceGateway.atualizacaoCartaoEmail(ciclista.getNome(), ciclista.getEmail());
-        if (atualizacaoCartaoEmailResponse.getStatusCode() != HttpStatus.OK) {
-            throw new IllegalArgumentException("Erro ao enviar email de atualização do cartão de crédito!");
-        }
+        externoServiceGateway.atualizacaoCartaoEmail(ciclista.getEmail());
     }
 }
