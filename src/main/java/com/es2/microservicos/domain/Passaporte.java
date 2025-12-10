@@ -12,7 +12,7 @@ public class Passaporte {
     private Long id;
     private String numero;
     private LocalDate validade;
-    private String pais; // É código do país (descobrir qual formato usar)
+    private String pais;
 
     public Passaporte(String numero, LocalDate validade, String pais) {
         this.numero = numero;
