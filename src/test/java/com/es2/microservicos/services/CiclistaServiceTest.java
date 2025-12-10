@@ -148,14 +148,10 @@ class CiclistaServiceTest {
     @DisplayName("Deve criar ciclista brasileiro com sucesso")
     void deveCriarCiclistaBrasileiroComSucesso() {
         when(ciclistaRepository.existsByEmail("joao@email.com")).thenReturn(false);
-        when(externoServiceGateway.validacaoCartaoDeCredito(any()))
-                .thenReturn(ResponseEntity.ok().build());
         when(ciclistaMapper.toCiclista(any(CriarCiclistaRequest.class))).thenReturn(ciclista);
         when(ciclistaRepository.save(any(Ciclista.class))).thenReturn(ciclista);
         when(cartaoService.cadastrarCartaoDeCredito(any(), any(Ciclista.class)))
                 .thenReturn(mock(CartaoResponse.class));
-        when(externoServiceGateway.confirmacaoCadastroEmail(anyString(), anyString()))
-                .thenReturn(ResponseEntity.ok().build());
         when(ciclistaMapper.toCiclistaResponse(any(Ciclista.class))).thenReturn(ciclistaResponse);
 
         CiclistaResponse resultado = ciclistaService.criarCiclista(criarRequest);
@@ -164,7 +160,7 @@ class CiclistaServiceTest {
         assertEquals(Status.INATIVO, resultado.status());
         verify(ciclistaRepository, times(1)).save(any(Ciclista.class));
         verify(cartaoService, times(1)).cadastrarCartaoDeCredito(any(), any(Ciclista.class));
-        verify(externoServiceGateway, times(1)).confirmacaoCadastroEmail(anyString(), anyString());
+        verify(externoServiceGateway, times(1)).confirmacaoCadastroEmail(anyString());
     }
 
     @Test
@@ -263,53 +259,18 @@ class CiclistaServiceTest {
     }
 
     @Test
-    @DisplayName("Deve lançar exceção quando cartão é inválido")
-    void deveLancarExcecaoQuandoCartaoInvalido() {
-        when(ciclistaRepository.existsByEmail(anyString())).thenReturn(false);
-        when(externoServiceGateway.validacaoCartaoDeCredito(any()))
-                .thenReturn(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
-
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> ciclistaService.criarCiclista(criarRequest)
-        );
-
-        assertEquals("Cartão de crédito inválido!", exception.getMessage());
-        verify(ciclistaRepository, never()).save(any(Ciclista.class));
-    }
-
-    @Test
     @DisplayName("Deve atualizar ciclista com sucesso")
     void deveAtualizarCiclistaComSucesso() {
         when(ciclistaRepository.findById(1L)).thenReturn(Optional.of(ciclista));
         doNothing().when(ciclistaMapper).updateCiclistaFromRequest(any(), any(Ciclista.class));
         when(ciclistaRepository.save(any(Ciclista.class))).thenReturn(ciclista);
-        when(externoServiceGateway.atualizacaoCiclistaEmail(anyString(), anyString()))
-                .thenReturn(ResponseEntity.ok().build());
         when(ciclistaMapper.toCiclistaResponse(any(Ciclista.class))).thenReturn(ciclistaResponse);
 
         CiclistaResponse resultado = ciclistaService.atualizarCiclista(1L, atualizarRequest);
 
         assertNotNull(resultado);
         verify(ciclistaRepository, times(1)).save(any(Ciclista.class));
-        verify(externoServiceGateway, times(1)).atualizacaoCiclistaEmail(anyString(), anyString());
-    }
-
-    @Test
-    @DisplayName("Deve lançar exceção quando falha envio de email ao atualizar")
-    void deveLancarExcecaoQuandoFalhaEnvioEmailAoAtualizar() {
-        when(ciclistaRepository.findById(1L)).thenReturn(Optional.of(ciclista));
-        doNothing().when(ciclistaMapper).updateCiclistaFromRequest(any(), any(Ciclista.class));
-        when(ciclistaRepository.save(any(Ciclista.class))).thenReturn(ciclista);
-        when(externoServiceGateway.atualizacaoCiclistaEmail(anyString(), anyString()))
-                .thenReturn(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
-
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
-                () -> ciclistaService.atualizarCiclista(1L, atualizarRequest)
-        );
-
-        assertEquals("Erro ao enviar email de atualização de ciclista!", exception.getMessage());
+        verify(externoServiceGateway, times(1)).atualizacaoCiclistaEmail(anyString());
     }
 
     @Test
@@ -366,14 +327,10 @@ class CiclistaServiceTest {
         ciclistaEstrangeiro.setPassaporte(passaporte);
 
         when(ciclistaRepository.existsByEmail(anyString())).thenReturn(false);
-        when(externoServiceGateway.validacaoCartaoDeCredito(any()))
-                .thenReturn(ResponseEntity.ok().build());
         when(ciclistaMapper.toCiclista(any(CriarCiclistaRequest.class))).thenReturn(ciclistaEstrangeiro);
         when(ciclistaRepository.save(any(Ciclista.class))).thenReturn(ciclistaEstrangeiro);
         when(cartaoService.cadastrarCartaoDeCredito(any(), any(Ciclista.class)))
                 .thenReturn(mock(CartaoResponse.class));
-        when(externoServiceGateway.confirmacaoCadastroEmail(anyString(), anyString()))
-                .thenReturn(ResponseEntity.ok().build());
         when(ciclistaMapper.toCiclistaResponse(any(Ciclista.class))).thenReturn(ciclistaResponse);
 
         CiclistaResponse resultado = ciclistaService.criarCiclista(requestEstrangeiro);
