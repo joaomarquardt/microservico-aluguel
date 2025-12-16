@@ -3,6 +3,7 @@ package com.es2.microservicos.external.gateways;
 import com.es2.microservicos.dtos.requests.AdicionarCartaoRequest;
 import com.es2.microservicos.dtos.requests.CobrancaRequest;
 import com.es2.microservicos.dtos.requests.EmailRequest;
+import com.es2.microservicos.dtos.requests.ValidacaoCartaoRequest;
 import com.es2.microservicos.dtos.responses.AluguelResponse;
 import com.es2.microservicos.dtos.responses.CobrancaResponse;
 import com.es2.microservicos.dtos.responses.EmailResponse;
@@ -87,9 +88,10 @@ public class ExternoServiceGateway {
     }
 
     public void validacaoCartaoDeCredito(AdicionarCartaoRequest cartaoRequest) {
+        ValidacaoCartaoRequest validacaoCartaoRequest = new ValidacaoCartaoRequest(cartaoRequest.nomeTitular(), cartaoRequest.numero(), cartaoRequest.validade().toString(), cartaoRequest.cvv());
         ResponseEntity<Void> validacaoResponse = restClient.post()
                 .uri("/validaCartaoDeCredito")
-                .body(cartaoRequest)
+                .body(validacaoCartaoRequest)
                 .retrieve()
                 .toEntity(Void.class);
         if (!validacaoResponse.getStatusCode().is2xxSuccessful()) {

@@ -12,7 +12,6 @@ import com.es2.microservicos.external.gateways.EquipamentoServiceGateway;
 import com.es2.microservicos.external.gateways.ExternoServiceGateway;
 import com.es2.microservicos.mappers.AluguelMapper;
 import com.es2.microservicos.repositories.AluguelRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
