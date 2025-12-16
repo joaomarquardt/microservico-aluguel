@@ -88,7 +88,8 @@ public class ExternoServiceGateway {
     }
 
     public void validacaoCartaoDeCredito(AdicionarCartaoRequest cartaoRequest) {
-        ValidacaoCartaoRequest validacaoCartaoRequest = new ValidacaoCartaoRequest(cartaoRequest.nomeTitular(), cartaoRequest.numero(), cartaoRequest.validade().toString(), cartaoRequest.cvv());
+        String validade = cartaoRequest.validade().toString().substring(0, 7);
+        ValidacaoCartaoRequest validacaoCartaoRequest = new ValidacaoCartaoRequest(cartaoRequest.nomeTitular(), cartaoRequest.numero(), validade, cartaoRequest.cvv());
         ResponseEntity<Void> validacaoResponse = restClient.post()
                 .uri("/validaCartaoDeCredito")
                 .body(validacaoCartaoRequest)
