@@ -3,6 +3,7 @@ package com.es2.microservicos.external.gateways;
 import com.es2.microservicos.dtos.requests.AdicionarCartaoRequest;
 import com.es2.microservicos.dtos.requests.CobrancaRequest;
 import com.es2.microservicos.dtos.requests.EmailRequest;
+import com.es2.microservicos.dtos.requests.ValidacaoCartaoRequest;
 import com.es2.microservicos.dtos.responses.AluguelResponse;
 import com.es2.microservicos.dtos.responses.CobrancaResponse;
 import com.es2.microservicos.dtos.responses.EmailResponse;
@@ -197,11 +198,11 @@ class ExternoServiceGatewayTest {
         ResponseEntity<Void> responseEntity = ResponseEntity.ok().build();
         when(restClient.post()).thenReturn(requestBodyUriSpec);
         when(requestBodyUriSpec.uri(anyString())).thenReturn(requestBodyUriSpec);
-        when(requestBodyUriSpec.body(any(AdicionarCartaoRequest.class))).thenReturn(requestBodyUriSpec);
+        when(requestBodyUriSpec.body(any(ValidacaoCartaoRequest.class))).thenReturn(requestBodyUriSpec);
         when(requestBodyUriSpec.retrieve()).thenReturn(responseSpec);
         when(responseSpec.toEntity(Void.class)).thenReturn(responseEntity);
         gateway.validacaoCartaoDeCredito(cartaoRequest);
-        verify(requestBodyUriSpec).body(cartaoRequest);
+        verify(requestBodyUriSpec).body(any(ValidacaoCartaoRequest.class));
     }
 
     @Test
@@ -213,7 +214,7 @@ class ExternoServiceGatewayTest {
         ResponseEntity<Void> responseEntity = ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         when(restClient.post()).thenReturn(requestBodyUriSpec);
         when(requestBodyUriSpec.uri(anyString())).thenReturn(requestBodyUriSpec);
-        when(requestBodyUriSpec.body(any(AdicionarCartaoRequest.class))).thenReturn(requestBodyUriSpec);
+        when(requestBodyUriSpec.body(any(ValidacaoCartaoRequest.class))).thenReturn(requestBodyUriSpec);
         when(requestBodyUriSpec.retrieve()).thenReturn(responseSpec);
         when(responseSpec.toEntity(Void.class)).thenReturn(responseEntity);
         assertThatThrownBy(() -> gateway.validacaoCartaoDeCredito(cartaoRequest))
