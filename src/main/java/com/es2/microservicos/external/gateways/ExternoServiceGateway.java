@@ -27,50 +27,50 @@ public class ExternoServiceGateway {
                 .retrieve()
                 .toEntity(EmailResponse.class);
         if (!emailResponse.getStatusCode().is2xxSuccessful()) {
-            throw new IllegalArgumentException("Falha ao enviar email com assunto '" + emailDetalhes.assunto() + "' para: " + emailDetalhes.emailDestinatario());
+            throw new IllegalArgumentException("Falha ao enviar email com assunto '" + emailDetalhes.assunto() + "' para: " + emailDetalhes.email());
         }
     }
 
-    public void confirmacaoCadastroEmail(String emailDestinatario) {
+    public void confirmacaoCadastroEmail(String email) {
         String assunto = "Confirmação de Cadastro";
         String corpo = "Seu cadastro foi realizado com sucesso!";
-        EmailRequest emailRequest = new EmailRequest(emailDestinatario, assunto, corpo);
+        EmailRequest emailRequest = new EmailRequest(email, assunto, corpo);
         enviarEmail(emailRequest);
     }
 
-    public void atualizacaoCiclistaEmail(String emailDestinatario) {
+    public void atualizacaoCiclistaEmail(String email) {
         String assunto = "Atualização de Dados do Ciclista";
         String corpo = "Seus dados foram atualizados com sucesso!";
-        EmailRequest emailRequest = new EmailRequest(emailDestinatario, assunto, corpo);
+        EmailRequest emailRequest = new EmailRequest(email, assunto, corpo);
         enviarEmail(emailRequest);
     }
 
-    public void atualizacaoCartaoEmail(String emailDestinatario) {
+    public void atualizacaoCartaoEmail(String email) {
         String assunto = "Atualização de Dados do Cartão de Crédito";
         String corpo = "Os dados do seu cartão de crédito foram atualizados com sucesso!";
-        EmailRequest emailRequest = new EmailRequest(emailDestinatario, assunto, corpo);
+        EmailRequest emailRequest = new EmailRequest(email, assunto, corpo);
         enviarEmail(emailRequest);
     }
 
-    public void dadosAluguelAtualEmail(String emailDestinatario, AluguelResponse detalhesAluguel) {
+    public void dadosAluguelAtualEmail(String email, AluguelResponse detalhesAluguel) {
         String assunto = "Aluguel em Andamento";
         String corpo = "Você já possui um aluguel em andamento e, portanto, não é possível realizar outro aluguel. Detalhes do aluguel: " + detalhesAluguel.toString();
-        EmailRequest emailRequest = new EmailRequest(emailDestinatario, assunto, corpo);
+        EmailRequest emailRequest = new EmailRequest(email, assunto, corpo);
         enviarEmail(emailRequest);
     }
 
-    public void dadosAluguelNovoEmail(String emailDestinatario, AluguelResponse detalhesAluguel) {
+    public void dadosAluguelNovoEmail(String email, AluguelResponse detalhesAluguel) {
         String assunto = "Confirmação do Novo Aluguel";
         String corpo = "Seu novo aluguel foi iniciado com sucesso. Detalhes do aluguel: " + detalhesAluguel.toString();
-        EmailRequest emailRequest = new EmailRequest(emailDestinatario, assunto, corpo);
+        EmailRequest emailRequest = new EmailRequest(email, assunto, corpo);
         enviarEmail(emailRequest);
     }
 
-    public void devolucaoBicicletaEmail(String nomeDestinatario, String emailDestinatario, AluguelResponse aluguelResponse, double taxaExtra) {
+    public void devolucaoBicicletaEmail(String nomeDestinatario, String email, AluguelResponse aluguelResponse, double taxaExtra) {
         String assunto = "Confirmação de Devolução da Bicicleta";
         String corpo = "Olá " + nomeDestinatario + ",\n\nSua bicicleta foi devolvida com sucesso.\nDetalhes do aluguel: " + aluguelResponse.toString() +
                 "\nTaxa extra cobrada: R$ " + taxaExtra + "\n\nObrigado por utilizar nosso serviço!";
-        EmailRequest emailRequest = new EmailRequest(emailDestinatario, assunto, corpo);
+        EmailRequest emailRequest = new EmailRequest(email, assunto, corpo);
         enviarEmail(emailRequest);
     }
 

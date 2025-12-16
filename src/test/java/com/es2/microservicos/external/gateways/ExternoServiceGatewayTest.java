@@ -70,9 +70,9 @@ class ExternoServiceGatewayTest {
         ArgumentCaptor<EmailRequest> captor = ArgumentCaptor.forClass(EmailRequest.class);
         verify(requestBodyUriSpec).body(captor.capture());
         EmailRequest emailCapturado = captor.getValue();
-        assertThat(emailCapturado.emailDestinatario()).isEqualTo("teste@example.com");
+        assertThat(emailCapturado.email()).isEqualTo("teste@example.com");
         assertThat(emailCapturado.assunto()).isEqualTo("Confirmação de Cadastro");
-        assertThat(emailCapturado.corpoMensagem()).contains("sucesso");
+        assertThat(emailCapturado.mensagem()).contains("sucesso");
     }
 
     @Test
@@ -122,7 +122,7 @@ class ExternoServiceGatewayTest {
         verify(requestBodyUriSpec).body(captor.capture());
         EmailRequest emailCapturado = captor.getValue();
         assertThat(emailCapturado.assunto()).isEqualTo("Aluguel em Andamento");
-        assertThat(emailCapturado.corpoMensagem()).contains("já possui um aluguel em andamento");
+        assertThat(emailCapturado.mensagem()).contains("já possui um aluguel em andamento");
     }
 
     @Test
@@ -139,7 +139,7 @@ class ExternoServiceGatewayTest {
         verify(requestBodyUriSpec).body(captor.capture());
         EmailRequest emailCapturado = captor.getValue();
         assertThat(emailCapturado.assunto()).isEqualTo("Confirmação do Novo Aluguel");
-        assertThat(emailCapturado.corpoMensagem()).contains("aluguel foi iniciado com sucesso");
+        assertThat(emailCapturado.mensagem()).contains("aluguel foi iniciado com sucesso");
     }
 
     @Test
@@ -156,8 +156,8 @@ class ExternoServiceGatewayTest {
         verify(requestBodyUriSpec).body(captor.capture());
         EmailRequest emailCapturado = captor.getValue();
         assertThat(emailCapturado.assunto()).isEqualTo("Confirmação de Devolução da Bicicleta");
-        assertThat(emailCapturado.corpoMensagem()).contains("João Silva");
-        assertThat(emailCapturado.corpoMensagem()).contains("R$ 5.0");
+        assertThat(emailCapturado.mensagem()).contains("João Silva");
+        assertThat(emailCapturado.mensagem()).contains("R$ 5.0");
     }
 
     @Test

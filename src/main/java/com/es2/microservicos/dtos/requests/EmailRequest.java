@@ -1,8 +1,8 @@
 package com.es2.microservicos.dtos.requests;
 
 public record EmailRequest(
-        String emailDestinatario,
+        String email,
         String assunto,
-        String corpoMensagem
+        String mensagem
 ) {
 }
