@@ -47,9 +47,9 @@ class CartaoDeCreditoRepositoryIntegrationTest {
         ciclista = ciclistaRepository.save(ciclista);
         cartaoDeCredito = new CartaoDeCredito();
         cartaoDeCredito.setNomeTitular("João Silva");
-        cartaoDeCredito.setNumeroCartao("1234567890123456");
-        cartaoDeCredito.setDataValidade(LocalDate.of(2025, 12, 31));
-        cartaoDeCredito.setCodigoSeguranca("123");
+        cartaoDeCredito.setNumero("1234567890123456");
+        cartaoDeCredito.setValidade(LocalDate.of(2025, 12, 31));
+        cartaoDeCredito.setCvv("123");
         cartaoDeCredito.setCiclista(ciclista);
     }
 
@@ -59,7 +59,7 @@ class CartaoDeCreditoRepositoryIntegrationTest {
         CartaoDeCredito cartaoSalvo = cartaoDeCreditoRepository.save(cartaoDeCredito);
         assertThat(cartaoSalvo.getId()).isNotNull();
         assertThat(cartaoSalvo.getNomeTitular()).isEqualTo("João Silva");
-        assertThat(cartaoSalvo.getNumeroCartao()).isEqualTo("1234567890123456");
+        assertThat(cartaoSalvo.getNumero()).isEqualTo("1234567890123456");
     }
 
     @Test
@@ -98,13 +98,13 @@ class CartaoDeCreditoRepositoryIntegrationTest {
         CartaoDeCredito cartaoSalvo = cartaoDeCreditoRepository.save(cartaoDeCredito);
         entityManager.flush();
         cartaoSalvo.setNomeTitular("João Silva Atualizado");
-        cartaoSalvo.setNumeroCartao("9876543210987654");
+        cartaoSalvo.setNumero("9876543210987654");
         cartaoDeCreditoRepository.save(cartaoSalvo);
         entityManager.flush();
         entityManager.clear();
         CartaoDeCredito cartaoAtualizado = cartaoDeCreditoRepository.findById(cartaoSalvo.getId()).orElseThrow();
         assertThat(cartaoAtualizado.getNomeTitular()).isEqualTo("João Silva Atualizado");
-        assertThat(cartaoAtualizado.getNumeroCartao()).isEqualTo("9876543210987654");
+        assertThat(cartaoAtualizado.getNumero()).isEqualTo("9876543210987654");
     }
 
     @Test

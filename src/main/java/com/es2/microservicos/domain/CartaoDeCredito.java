@@ -11,9 +11,9 @@ public class CartaoDeCredito {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nomeTitular;
-    private String numeroCartao;
-    private LocalDate dataValidade;
-    private String codigoSeguranca;
+    private String numero;
+    private LocalDate validade;
+    private String cvv;
     @ManyToOne
     @JoinColumn(name = "ciclista_id")
     private Ciclista ciclista;
@@ -21,12 +21,12 @@ public class CartaoDeCredito {
     public CartaoDeCredito() {
     }
 
-    public CartaoDeCredito(Long id, String nomeTitular, String numeroCartao, LocalDate dataValidade, String codigoSeguranca, Ciclista ciclista) {
+    public CartaoDeCredito(Long id, String nomeTitular, String numero, LocalDate validade, String cvv, Ciclista ciclista) {
         this.id = id;
         this.nomeTitular = nomeTitular;
-        this.numeroCartao = numeroCartao;
-        this.dataValidade = dataValidade;
-        this.codigoSeguranca = codigoSeguranca;
+        this.numero = numero;
+        this.validade = validade;
+        this.cvv = cvv;
         this.ciclista = ciclista;
     }
 
@@ -46,28 +46,28 @@ public class CartaoDeCredito {
         this.nomeTitular = nomeTitular;
     }
 
-    public String getNumeroCartao() {
-        return numeroCartao;
+    public String getNumero() {
+        return numero;
     }
 
-    public void setNumeroCartao(String numeroCartao) {
-        this.numeroCartao = numeroCartao;
+    public void setNumero(String numero) {
+        this.numero = numero;
     }
 
-    public LocalDate getDataValidade() {
-        return dataValidade;
+    public LocalDate getValidade() {
+        return validade;
     }
 
-    public void setDataValidade(LocalDate dataValidade) {
-        this.dataValidade = dataValidade;
+    public void setValidade(LocalDate validade) {
+        this.validade = validade;
     }
 
-    public String getCodigoSeguranca() {
-        return codigoSeguranca;
+    public String getCvv() {
+        return cvv;
     }
 
-    public void setCodigoSeguranca(String codigoSeguranca) {
-        this.codigoSeguranca = codigoSeguranca;
+    public void setCvv(String cvv) {
+        this.cvv = cvv;
     }
 
     public Ciclista getCiclista() {

@@ -21,7 +21,6 @@ public record AtualizarCiclistaRequest(
         String senha,
         @NotEmpty(message = "A confirmação de senha do ciclista não pode ser vazia!")
         String confirmacaoSenha,
-        @NotNull(message = "O passaporte do ciclista não pode ser nulo!")
         RegistrarPassaporteRequest passaporte,
         @NotEmpty(message = "A URL da foto do documento não pode ser vazia!")
         String urlFotoDocumento

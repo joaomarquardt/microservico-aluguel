@@ -69,9 +69,9 @@ class CartaoDeCreditoServiceTest {
         cartaoDeCredito = new CartaoDeCredito();
         cartaoDeCredito.setId(1L);
         cartaoDeCredito.setNomeTitular("João Silva");
-        cartaoDeCredito.setNumeroCartao("1234567890123456");
-        cartaoDeCredito.setDataValidade(LocalDate.of(2025, 12, 31));
-        cartaoDeCredito.setCodigoSeguranca("123");
+        cartaoDeCredito.setNumero("1234567890123456");
+        cartaoDeCredito.setValidade(LocalDate.of(2025, 12, 31));
+        cartaoDeCredito.setCvv("123");
         cartaoDeCredito.setCiclista(ciclista);
 
         cartaoResponse = new CartaoResponse(
@@ -92,8 +92,8 @@ class CartaoDeCreditoServiceTest {
         CartaoResponse resultado = cartaoDeCreditoService.cadastrarCartaoDeCredito(cartaoRequest, ciclista);
         assertThat(resultado).isNotNull();
         assertThat(resultado.nomeTitular()).isEqualTo("João Silva");
-        assertThat(resultado.numeroCartao()).isEqualTo("1234567890123456");
-        assertThat(resultado.codigoSeguranca()).isEqualTo("123");
+        assertThat(resultado.numero()).isEqualTo("1234567890123456");
+        assertThat(resultado.cvv()).isEqualTo("123");
         verify(cartaoMapper).toCartaoDeCredito(cartaoRequest);
         verify(cartaoDeCreditoRepository).save(any(CartaoDeCredito.class));
         verify(cartaoMapper).toCartaoResponse(cartaoDeCredito);
@@ -107,7 +107,7 @@ class CartaoDeCreditoServiceTest {
         assertThat(resultado).isNotNull();
         assertThat(resultado.getId()).isEqualTo(1L);
         assertThat(resultado.getNomeTitular()).isEqualTo("João Silva");
-        assertThat(resultado.getNumeroCartao()).isEqualTo("1234567890123456");
+        assertThat(resultado.getNumero()).isEqualTo("1234567890123456");
         verify(cartaoDeCreditoRepository).findByCiclistaId(1L);
     }
 
@@ -258,8 +258,8 @@ class CartaoDeCreditoServiceTest {
         CartaoResponse resultado = cartaoDeCreditoService.cadastrarCartaoDeCredito(cartaoRequest, ciclista);
         assertThat(resultado).isNotNull();
         assertThat(resultado.nomeTitular()).isEqualTo("João Silva");
-        assertThat(resultado.numeroCartao()).isEqualTo("1234567890123456");
-        assertThat(resultado.dataValidade()).isEqualTo(LocalDate.of(2025, 12, 31));
-        assertThat(resultado.codigoSeguranca()).isEqualTo("123");
+        assertThat(resultado.numero()).isEqualTo("1234567890123456");
+        assertThat(resultado.validade()).isEqualTo(LocalDate.of(2025, 12, 31));
+        assertThat(resultado.cvv()).isEqualTo("123");
     }
 }

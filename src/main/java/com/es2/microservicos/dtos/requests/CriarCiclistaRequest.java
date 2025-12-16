@@ -21,10 +21,9 @@ public record CriarCiclistaRequest(
         String senha,
         @NotEmpty(message = "A confirmação de senha do ciclista não pode ser vazia!")
         String confirmacaoSenha,
-        @NotNull(message = "O passaporte do ciclista não pode ser nulo!")
         RegistrarPassaporteRequest passaporte,
         @NotNull(message = "O cartão de crédito do ciclista não pode ser nulo!")
-        AdicionarCartaoRequest cartaoDeCredito,
+        AdicionarCartaoRequest meioDePagamento,
         @NotEmpty(message = "A URL da foto do documento não pode ser vazia!")
         String urlFotoDocumento
 ) {

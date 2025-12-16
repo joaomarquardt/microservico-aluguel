@@ -5,8 +5,8 @@ import java.time.LocalDate;
 public record CartaoResponse(
         Long id,
         String nomeTitular,
-        String numeroCartao,
-        LocalDate dataValidade,
-        String codigoSeguranca
+        String numero,
+        LocalDate validade,
+        String cvv
 ) {
 }

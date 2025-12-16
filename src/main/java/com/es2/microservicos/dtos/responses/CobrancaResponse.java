@@ -6,6 +6,6 @@ public record CobrancaResponse(
         String horaSolicitacao,
         String horaFinalizacao,
         double valor,
-        Long ciclistaId
+        Long ciclista
 ) {
 }

@@ -44,11 +44,11 @@ public class CiclistaService {
         if (!ciclistaRequest.senha().equals(ciclistaRequest.confirmacaoSenha())) {
             throw new IllegalArgumentException("Senha e confirmação de senha não coincidem!");
         }
-        externoServiceGateway.validacaoCartaoDeCredito(ciclistaRequest.cartaoDeCredito());
+        externoServiceGateway.validacaoCartaoDeCredito(ciclistaRequest.meioDePagamento());
         Ciclista ciclista = ciclistaMapper.toCiclista(ciclistaRequest);
         ciclista.setStatus(Status.INATIVO);
         Ciclista ciclistaSalvo = ciclistaRepository.save(ciclista);
-        cartaoService.cadastrarCartaoDeCredito(ciclistaRequest.cartaoDeCredito(), ciclistaSalvo);
+        cartaoService.cadastrarCartaoDeCredito(ciclistaRequest.meioDePagamento(), ciclistaSalvo);
         externoServiceGateway.confirmacaoCadastroEmail(ciclistaSalvo.getEmail());
         return ciclistaMapper.toCiclistaResponse(ciclistaSalvo);
     }

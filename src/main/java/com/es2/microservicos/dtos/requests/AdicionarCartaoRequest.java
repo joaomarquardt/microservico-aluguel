@@ -10,11 +10,11 @@ public record AdicionarCartaoRequest(
         @NotEmpty(message = "Nome do titular não pode ser vazio!")
         String nomeTitular,
         @NotEmpty(message = "Número do cartão não pode ser vazio!")
-        String numeroCartao,
+        String numero,
         @NotNull(message = "Data de validade não pode ser nula!")
         @Future(message = "Data de validade deve ser uma data futura!")
-        LocalDate dataValidade,
+        LocalDate validade,
         @NotEmpty(message = "Código de segurança não pode ser vazio!")
-        String codigoSeguranca
+        String cvv
 ) {
 }

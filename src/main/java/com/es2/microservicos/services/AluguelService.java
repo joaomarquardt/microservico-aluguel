@@ -39,7 +39,7 @@ public class AluguelService {
             throw new IllegalArgumentException("Tranca inicial não existe!");
         }
         BicicletaResponse bicicletaTranca = equipamentoServiceGateway.obterBicicletaPorIdTranca(request.trancaInicio());
-        Ciclista ciclista = ciclistaService.obterCiclistaPorId(request.ciclistaId());
+        Ciclista ciclista = ciclistaService.obterCiclistaPorId(request.ciclista());
         if (ciclista.getStatus() == Status.INATIVO) {
             throw new IllegalArgumentException("Ciclista com status INATIVO não pode alugar bicicleta!");
         }

@@ -34,9 +34,9 @@ class CartaoDeCreditoTest {
 
         assertEquals(1L, cartao.getId());
         assertEquals("João Silva", cartao.getNomeTitular());
-        assertEquals("1234567890123456", cartao.getNumeroCartao());
-        assertEquals(LocalDate.of(2027, 12, 31), cartao.getDataValidade());
-        assertEquals("123", cartao.getCodigoSeguranca());
+        assertEquals("1234567890123456", cartao.getNumero());
+        assertEquals(LocalDate.of(2027, 12, 31), cartao.getValidade());
+        assertEquals("123", cartao.getCvv());
         assertEquals(ciclista, cartao.getCiclista());
     }
 
@@ -49,16 +49,16 @@ class CartaoDeCreditoTest {
 
         cartao.setId(1L);
         cartao.setNomeTitular("João Silva");
-        cartao.setNumeroCartao("1234567890123456");
-        cartao.setDataValidade(LocalDate.of(2027, 12, 31));
-        cartao.setCodigoSeguranca("123");
+        cartao.setNumero("1234567890123456");
+        cartao.setValidade(LocalDate.of(2027, 12, 31));
+        cartao.setCvv("123");
         cartao.setCiclista(ciclista);
 
         assertEquals(1L, cartao.getId());
         assertEquals("João Silva", cartao.getNomeTitular());
-        assertEquals("1234567890123456", cartao.getNumeroCartao());
-        assertEquals(LocalDate.of(2027, 12, 31), cartao.getDataValidade());
-        assertEquals("123", cartao.getCodigoSeguranca());
+        assertEquals("1234567890123456", cartao.getNumero());
+        assertEquals(LocalDate.of(2027, 12, 31), cartao.getValidade());
+        assertEquals("123", cartao.getCvv());
         assertEquals(ciclista, cartao.getCiclista());
     }
 }
