@@ -15,6 +15,7 @@ public class Ciclista {
     @Enumerated(EnumType.STRING)
     private Status status;
     private String cpf;
+    private String senha;
     private LocalDate nascimento;
     @Enumerated(EnumType.STRING)
     private Nacionalidade nacionalidade;
@@ -26,7 +27,7 @@ public class Ciclista {
     public Ciclista() {
     }
 
-    public Ciclista(Long id, String nome, String email, Status status, String cpf, LocalDate nascimento, Nacionalidade nacionalidade, Passaporte passaporte, String urlFotoDocumento) {
+    public Ciclista(Long id, String nome, String email, Status status, String cpf, LocalDate nascimento, Nacionalidade nacionalidade, Passaporte passaporte, String urlFotoDocumento, String senha) {
         this.id = id;
         this.nome = nome;
         this.email = email;
@@ -36,6 +37,7 @@ public class Ciclista {
         this.nacionalidade = nacionalidade;
         this.passaporte = passaporte;
         this.urlFotoDocumento = urlFotoDocumento;
+        this.senha = senha;
     }
 
     public Long getId() {
@@ -108,5 +110,13 @@ public class Ciclista {
 
     public void setUrlFotoDocumento(String urlFotoDocumento) {
         this.urlFotoDocumento = urlFotoDocumento;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
     }
 }

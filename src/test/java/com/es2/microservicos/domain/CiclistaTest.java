@@ -31,7 +31,8 @@ class CiclistaTest {
                 LocalDate.of(1990, 1, 1),
                 Nacionalidade.BRASILEIRO,
                 passaporte,
-                "http://foto.com/doc.jpg"
+                "http://foto.com/doc.jpg",
+                "123"
         );
 
         assertEquals(1L, ciclista.getId());
